@@ -26,6 +26,10 @@ android {
         }
     }
 
+    buildTypes.each {
+        it.buildConfigField 'String', 'BASE_URL', "\"https://api.github.com\""
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -41,9 +45,10 @@ dependencies {
     // base
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "androidx.core:core-ktx:$ktxVersion"
-    implementation "android.arch.lifecycle:extensions:$lifecycleVersion"
-    implementation "androidx.activity:activity-ktx:$ktxVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
+    implementation "androidx.activity:activity-ktx:$activity"
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
+    implementation "androidx.fragment:fragment-ktx:$fragmentVersion"
 
     // view
     implementation "androidx.recyclerview:recyclerview:$recyclerView"
