@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:text="@tools:sample/lorem/random"
-            android:text="@{viewModel.responseText}"/>
+            android:text="@{viewModel.searchResponse.data.toString()}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

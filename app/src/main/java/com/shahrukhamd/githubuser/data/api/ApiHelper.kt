@@ -7,4 +7,10 @@
 
 package com.shahrukhamd.githubuser.data.api
 
-interface ApiHelper
+import com.shahrukhamd.githubuser.data.model.ApiUserSearchResponse
+import retrofit2.Response
+
+interface ApiHelper {
+
+    suspend fun getUser(query: String): Response<ApiUserSearchResponse>
+}

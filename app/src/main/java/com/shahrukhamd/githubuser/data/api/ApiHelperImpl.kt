@@ -13,5 +13,5 @@ import javax.inject.Inject
 
 class ApiHelperImpl @Inject constructor(private val apiService: ApiService) : ApiHelper {
 
-    suspend fun getUser(): Response<ApiUserSearchResponse> = apiService.getUser()
+    override suspend fun getUser(query: String): Response<ApiUserSearchResponse> = apiService.getUser(query)
 }

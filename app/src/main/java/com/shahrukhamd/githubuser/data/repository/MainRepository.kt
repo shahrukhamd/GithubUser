@@ -11,4 +11,6 @@ import com.shahrukhamd.githubuser.data.api.ApiHelper
 import javax.inject.Inject
 
 class MainRepository @Inject constructor(private val apiHelper: ApiHelper) {
+
+    suspend fun getUser(query: String) = apiHelper.getUser(query)
 }

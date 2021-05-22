@@ -15,72 +15,72 @@ import kotlinx.android.parcel.Parcelize
 data class ApiUserSearchResponse(
 
 	@Json(name="total_count")
-	val totalCount: Int? = null,
+	var totalCount: Int? = null,
 
 	@Json(name="incomplete_results")
-	val incompleteResults: Boolean? = null,
+	var incompleteResults: Boolean? = null,
 
 	@Json(name="items")
-	val items: List<User?>? = null
+	var items: List<User?>? = null
 ) : Parcelable
 
 @Parcelize
 data class User(
 
 	@Json(name="gists_url")
-	val gistsUrl: String? = null,
+	var gistsUrl: String? = null,
 
 	@Json(name="repos_url")
-	val reposUrl: String? = null,
+	var reposUrl: String? = null,
 
 	@Json(name="following_url")
-	val followingUrl: String? = null,
+	var followingUrl: String? = null,
 
 	@Json(name="starred_url")
-	val starredUrl: String? = null,
+	var starredUrl: String? = null,
 
 	@Json(name="login")
-	val login: String? = null,
+	var login: String? = null,
 
 	@Json(name="followers_url")
-	val followersUrl: String? = null,
+	var followersUrl: String? = null,
 
 	@Json(name="type")
-	val type: String? = null,
+	var type: String? = null,
 
 	@Json(name="url")
-	val url: String? = null,
+	var url: String? = null,
 
 	@Json(name="subscriptions_url")
-	val subscriptionsUrl: String? = null,
+	var subscriptionsUrl: String? = null,
 
 	@Json(name="score")
-	val score: Double? = null,
+	var score: Double? = null,
 
 	@Json(name="received_events_url")
-	val receivedEventsUrl: String? = null,
+	var receivedEventsUrl: String? = null,
 
 	@Json(name="avatar_url")
-	val avatarUrl: String? = null,
+	var avatarUrl: String? = null,
 
 	@Json(name="events_url")
-	val eventsUrl: String? = null,
+	var eventsUrl: String? = null,
 
 	@Json(name="html_url")
-	val htmlUrl: String? = null,
+	var htmlUrl: String? = null,
 
 	@Json(name="site_admin")
-	val siteAdmin: Boolean? = null,
+	var siteAdmin: Boolean? = null,
 
 	@Json(name="id")
-	val id: Int? = null,
+	var id: Int? = null,
 
 	@Json(name="gravatar_id")
-	val gravatarId: String? = null,
+	var gravatarId: String? = null,
 
 	@Json(name="node_id")
-	val nodeId: String? = null,
+	var nodeId: String? = null,
 
 	@Json(name="organizations_url")
-	val organizationsUrl: String? = null
+	var organizationsUrl: String? = null
 ) : Parcelable

@@ -16,13 +16,14 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity: AppCompatActivity() {
 
-    private val mainViewModel by viewModels<MainViewModel>()
-    private lateinit var viewBinding: ActivityMainBinding
+    private val mainViewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val viewBinding = ActivityMainBinding.inflate(layoutInflater)
         viewBinding.viewModel = mainViewModel
         setContentView(viewBinding.root)
+
+        mainViewModel.onSearchQueryChanged("shahrukhamd")
     }
 }
