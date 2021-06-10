@@ -26,7 +26,7 @@ class MainViewModel @Inject constructor(var mainRepository: MainRepository): Vie
 
     fun onSearchQueryChanged(query: String) {
         viewModelScope.launch {
-            _searchResponse.value = Resource.loading(null)
+            _searchResponse.value = Resource.loading()
             mainRepository.getUser(query).let {
                 if (it.isSuccessful) {
                     _searchResponse.value = Resource.success(it.body())
@@ -35,5 +35,7 @@ class MainViewModel @Inject constructor(var mainRepository: MainRepository): Vie
                 }
             }
         }
+
+
     }
 }

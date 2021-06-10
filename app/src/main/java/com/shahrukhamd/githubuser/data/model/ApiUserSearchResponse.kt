@@ -21,7 +21,7 @@ data class ApiUserSearchResponse(
 	var incompleteResults: Boolean? = null,
 
 	@Json(name="items")
-	var items: List<User?>? = null
+	var items: List<User>? = null
 ) : Parcelable
 
 @Parcelize
