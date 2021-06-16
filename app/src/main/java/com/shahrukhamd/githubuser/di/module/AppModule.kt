@@ -8,9 +8,7 @@
 package com.shahrukhamd.githubuser.di.module
 
 import com.shahrukhamd.githubuser.BuildConfig
-import com.shahrukhamd.githubuser.data.api.ApiHelper
-import com.shahrukhamd.githubuser.data.api.ApiHelperImpl
-import com.shahrukhamd.githubuser.data.api.ApiService
+import com.shahrukhamd.githubuser.data.api.GithubService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -30,6 +28,14 @@ class AppModule {
 
     @Provides
     fun provideBaseUrl() = BuildConfig.BASE_URL
+
+    @Provides
+    fun provideConverterFactory(): Converter.Factory {
+        val moshi = Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+        return MoshiConverterFactory.create(moshi)
+    }
 
     @Provides
     @Singleton
@@ -56,17 +62,5 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideApiService(retrofit: Retrofit): ApiService = retrofit.create(ApiService::class.java)
-
-    @Provides
-    @Singleton
-    fun provideApiHelper(apiHelper: ApiHelperImpl): ApiHelper = apiHelper
-
-    @Provides
-    fun provideConverterFactory(): Converter.Factory {
-        val moshi = Moshi.Builder()
-            .add(KotlinJsonAdapterFactory())
-            .build()
-        return MoshiConverterFactory.create(moshi)
-    }
+    fun provideApiService(retrofit: Retrofit): GithubService = retrofit.create(GithubService::class.java)
 }

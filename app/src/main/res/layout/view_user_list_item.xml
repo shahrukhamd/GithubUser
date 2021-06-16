@@ -6,7 +6,7 @@
     <data>
         <variable
             name="userModel"
-            type="com.shahrukhamd.githubuser.data.model.User" />
+            type="com.shahrukhamd.githubuser.data.model.GithubUser" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

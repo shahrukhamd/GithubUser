@@ -81,4 +81,7 @@ dependencies {
 
     // tools
     implementation "com.jakewharton.timber:timber:$timberVersion"
+
+    // pagination
+    implementation "androidx.paging:paging-runtime-ktx:$pagingVersion"
 }

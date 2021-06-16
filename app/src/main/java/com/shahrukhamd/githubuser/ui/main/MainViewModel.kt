@@ -11,31 +11,29 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.shahrukhamd.githubuser.data.model.ApiUserSearchResponse
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.shahrukhamd.githubuser.data.model.GithubUser
 import com.shahrukhamd.githubuser.data.repository.MainRepository
-import com.shahrukhamd.githubuser.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(var mainRepository: MainRepository): ViewModel() {
+class MainViewModel @Inject constructor(private var mainRepository: MainRepository): ViewModel() {
 
-    private val _searchResponse = MutableLiveData<Resource<ApiUserSearchResponse?>>()
-    val searchResponse: LiveData<Resource<ApiUserSearchResponse?>> = _searchResponse
+    private val _searchResponse = MutableLiveData<PagingData<GithubUser>>()
+    val searchResponse: LiveData<PagingData<GithubUser>> = _searchResponse
+
+    private val _showRefreshingView = MutableLiveData<Boolean>()
+    val showRefreshingView: LiveData<Boolean> = _showRefreshingView
 
     fun onSearchQueryChanged(query: String) {
         viewModelScope.launch {
-            _searchResponse.value = Resource.loading()
-            mainRepository.getUser(query).let {
-                if (it.isSuccessful) {
-                    _searchResponse.value = Resource.success(it.body())
-                } else {
-                    _searchResponse.value = Resource.error(it.body(), it.message())
-                }
+            mainRepository.getPaginatedUser(query).cachedIn(this).collectLatest {
+                _searchResponse.postValue(it)
             }
         }
-
-
     }
 }

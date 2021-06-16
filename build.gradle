@@ -43,6 +43,9 @@ buildscript {
 
         // tools
         timberVersion = "4.7.1"
+
+        // pagination
+        pagingVersion = "3.0.0"
     }
 
     repositories {

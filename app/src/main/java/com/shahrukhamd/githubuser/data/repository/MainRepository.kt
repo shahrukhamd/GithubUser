@@ -7,10 +7,23 @@
 
 package com.shahrukhamd.githubuser.data.repository
 
-import com.shahrukhamd.githubuser.data.api.ApiHelper
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.shahrukhamd.githubuser.data.api.GithubService
+import com.shahrukhamd.githubuser.data.model.GithubUser
+import com.shahrukhamd.githubuser.data.source.GithubPagingSource
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class MainRepository @Inject constructor(private val apiHelper: ApiHelper) {
+private const val NETWORK_PAGE_SIZE = 30
 
-    suspend fun getUser(query: String) = apiHelper.getUser(query)
+class MainRepository @Inject constructor(private val service: GithubService) {
+
+    fun getPaginatedUser(query: String): Flow<PagingData<GithubUser>> {
+        return Pager(
+            config = PagingConfig(NETWORK_PAGE_SIZE, enablePlaceholders = false),
+            pagingSourceFactory = { GithubPagingSource(service, query) }
+        ).flow
+    }
 }

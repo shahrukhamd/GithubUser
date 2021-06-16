@@ -12,7 +12,10 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface ApiService {
+interface GithubService {
     @GET("/search/users")
     suspend fun getUser(@Query("q") query: String): Response<ApiUserSearchResponse>
+
+    @GET("/search/users")
+    suspend fun getPaginatedUser(@Query("q") query: String, @Query("page") page: Int): Response<ApiUserSearchResponse>
 }

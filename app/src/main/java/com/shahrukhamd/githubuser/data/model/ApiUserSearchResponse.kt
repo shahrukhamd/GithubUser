@@ -21,11 +21,11 @@ data class ApiUserSearchResponse(
 	var incompleteResults: Boolean? = null,
 
 	@Json(name="items")
-	var items: List<User>? = null
+	var items: List<GithubUser>? = null
 ) : Parcelable
 
 @Parcelize
-data class User(
+data class GithubUser(
 
 	@Json(name="gists_url")
 	var gistsUrl: String? = null,

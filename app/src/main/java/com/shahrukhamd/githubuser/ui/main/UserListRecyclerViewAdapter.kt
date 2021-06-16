@@ -4,14 +4,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.shahrukhamd.githubuser.R
-import com.shahrukhamd.githubuser.data.model.User
+import com.shahrukhamd.githubuser.data.model.GithubUser
 import com.shahrukhamd.githubuser.databinding.ViewUserListItemBinding
 
-class MainViewListAdapter: RecyclerView.Adapter<MainViewListAdapter.ViewHolder>() {
-
-    private var userList: MutableList<User> = mutableListOf()
+class UserListRecyclerViewAdapter: PagingDataAdapter<GithubUser, UserListRecyclerViewAdapter.ViewHolder>(UserListDiffUtil()) {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding: ViewUserListItemBinding? = DataBindingUtil.bind(itemView)
@@ -24,18 +24,16 @@ class MainViewListAdapter: RecyclerView.Adapter<MainViewListAdapter.ViewHolder>(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.binding?.userModel = userList[position]
+        holder.binding?.userModel = getItem(position)
+    }
+}
+
+class UserListDiffUtil: DiffUtil.ItemCallback<GithubUser>() {
+    override fun areItemsTheSame(oldItem: GithubUser, newItem: GithubUser): Boolean {
+        return oldItem.id == newItem.id
     }
 
-    override fun getItemCount(): Int {
-        return userList.size
-    }
-
-    fun postData(data: List<User>?) {
-        data?.let {
-            userList.clear()
-            userList.addAll(it)
-            notifyDataSetChanged()
-        }
+    override fun areContentsTheSame(oldItem: GithubUser, newItem: GithubUser): Boolean {
+        return oldItem == newItem
     }
 }
