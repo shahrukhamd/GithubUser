@@ -67,6 +67,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$logInterceptorVersion"
+    implementation "com.squareup.moshi:moshi-kotlin:$moshiKotlinVersion"
 
     // di
     implementation "com.google.dagger:hilt-android:$hiltAndroidVersion"
@@ -77,4 +78,7 @@ dependencies {
     // coroutine
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineCoreVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineAndroidVersion"
+
+    // tools
+    implementation "com.jakewharton.timber:timber:$timberVersion"
 }

@@ -27,7 +27,7 @@
                 android:layout_height="match_parent"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/view_user_list_item"
-                dividerItemDecorationOrientation="@{LinearLayout.HORIZONTAL}" />
+                dividerItemDecorationOrientation="@{LinearLayout.VERTICAL}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
