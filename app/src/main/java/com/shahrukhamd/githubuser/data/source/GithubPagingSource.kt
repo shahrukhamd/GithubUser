@@ -23,11 +23,21 @@ class GithubPagingSource(
             } else {
                 position + 1
             }
-            LoadResult.Page(
-                data = response.body()?.items.orEmpty(),
-                prevKey = if (position == STARTING_PAGE_INDEX) null else position - 1,
-                nextKey = nextPage
-            )
+            when (response.code()) {
+                200 ->
+                    LoadResult.Page(
+                        data = response.body()?.items.orEmpty(),
+                        prevKey = if (position == STARTING_PAGE_INDEX) null else position - 1,
+                        nextKey = nextPage
+                    )
+                else ->
+                    LoadResult.Error(
+                        Exception(
+                            response.errorBody()
+                                ?.string() // TODO exception message should be user readable
+                        )
+                    )
+            }
         } catch (ioException: IOException) {
             return LoadResult.Error(ioException)
         } catch (httpException: HttpException) {

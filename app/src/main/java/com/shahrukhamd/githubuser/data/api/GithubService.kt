@@ -14,8 +14,5 @@ import retrofit2.http.Query
 
 interface GithubService {
     @GET("/search/users")
-    suspend fun getUser(@Query("q") query: String): Response<ApiUserSearchResponse>
-
-    @GET("/search/users")
     suspend fun getPaginatedUser(@Query("q") query: String, @Query("page") page: Int): Response<ApiUserSearchResponse>
 }

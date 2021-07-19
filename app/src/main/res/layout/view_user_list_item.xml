@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="userModel"
             type="com.shahrukhamd.githubuser.data.model.GithubUser" />
@@ -16,15 +17,15 @@
 
         <ImageView
             android:id="@+id/user_item_image"
-            android:layout_width="@dimen/main_list_user_icon_width_height"
-            android:layout_height="@dimen/main_list_user_icon_width_height"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/ic_user_default_48px"
+            circleCropEnabled="@{true}"
             loadImage="@{userModel.avatarUrl}"
             placeholder="@{@drawable/ic_user_default_48px}"
-            circleCropEnabled="@{true}"/>
+            android:layout_width="@dimen/main_list_user_icon_width_height"
+            android:layout_height="@dimen/main_list_user_icon_width_height"
+            android:src="@drawable/ic_user_default_48px"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/user_item_name"
@@ -34,23 +35,23 @@
             android:ellipsize="end"
             android:fontFamily="sans-serif-medium"
             android:maxLines="2"
+            android:text="@{userModel.login}"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.488"
             app:layout_constraintStart_toEndOf="@+id/user_item_image"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@tools:sample/full_names"
-            android:text="@{userModel.login}"/>
+            tools:text="@tools:sample/full_names" />
 
         <TextView
             android:id="@+id/user_item_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{userModel.id.toString()}"
             app:layout_constraintBottom_toBottomOf="@+id/user_item_image"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="123345"
-            android:text="@{userModel.id.toString()}"/>
+            tools:text="123345" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

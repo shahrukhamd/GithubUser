@@ -26,9 +26,6 @@ class MainViewModel @Inject constructor(private var mainRepository: MainReposito
     private val _searchResponse = MutableLiveData<PagingData<GithubUser>>()
     val searchResponse: LiveData<PagingData<GithubUser>> = _searchResponse
 
-    private val _showRefreshingView = MutableLiveData<Boolean>()
-    val showRefreshingView: LiveData<Boolean> = _showRefreshingView
-
     fun onSearchQueryChanged(query: String) {
         viewModelScope.launch {
             mainRepository.getPaginatedUser(query).cachedIn(this).collectLatest {

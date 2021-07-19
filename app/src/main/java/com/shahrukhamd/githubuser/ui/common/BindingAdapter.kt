@@ -1,4 +1,4 @@
-package com.shahrukhamd.githubuser.ui
+package com.shahrukhamd.githubuser.ui.common
 
 import android.graphics.drawable.Drawable
 import android.view.View
