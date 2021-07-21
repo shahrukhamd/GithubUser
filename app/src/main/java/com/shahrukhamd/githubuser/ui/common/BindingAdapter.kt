@@ -11,8 +11,8 @@ import com.bumptech.glide.Glide
 /**
  * @param isVisible boolean value to change visibility of a view
  */
-@BindingAdapter(value = ["setVisibility"])
-fun View.setVisibility(isVisible: Boolean?) {
+@BindingAdapter(value = ["isVisible"])
+fun View.isVisible(isVisible: Boolean?) {
     visibility = if (isVisible != null && isVisible) View.VISIBLE else View.GONE
 }
 

@@ -11,6 +11,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.CombinedLoadStates
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.shahrukhamd.githubuser.data.model.GithubUser
@@ -21,10 +23,19 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private var mainRepository: MainRepository): ViewModel() {
+class MainViewModel @Inject constructor(private var mainRepository: MainRepository) : ViewModel() {
 
     private val _searchResponse = MutableLiveData<PagingData<GithubUser>>()
     val searchResponse: LiveData<PagingData<GithubUser>> = _searchResponse
+
+    private val _showRefreshingView = MutableLiveData<Boolean>()
+    val showRefreshingView: LiveData<Boolean> = _showRefreshingView
+
+    private val _showRetryButton = MutableLiveData<Boolean>()
+    val showRetryButton: LiveData<Boolean> = _showRetryButton
+
+    private val _showToast = MutableLiveData<String>()
+    val showToast: LiveData<String> = _showToast
 
     fun onSearchQueryChanged(query: String) {
         viewModelScope.launch {
@@ -33,4 +44,18 @@ class MainViewModel @Inject constructor(private var mainRepository: MainReposito
             }
         }
     }
+
+    fun onUserListLoadStateChange(loadState: CombinedLoadStates) {
+        _showRefreshingView.value = loadState.source.refresh is LoadState.Loading
+        _showRetryButton.value = loadState.source.refresh is LoadState.Error
+
+        val errorState = loadState.source.append as? LoadState.Error
+            ?: loadState.append as? LoadState.Error
+            ?: loadState.source.prepend as? LoadState.Error
+            ?: loadState.prepend as? LoadState.Error
+            ?: loadState.source.refresh as? LoadState.Error
+
+        errorState?.let { _showToast.value = it.error.localizedMessage }
+    }
+
 }

@@ -13,9 +13,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.LoadState
 import com.shahrukhamd.githubuser.R
 import com.shahrukhamd.githubuser.databinding.ActivityMainBinding
 import com.shahrukhamd.githubuser.ui.common.ListItemLoadStateAdapter
@@ -30,6 +28,8 @@ class MainActivity : AppCompatActivity() {
     private var userListAdapter: UserListRecyclerViewAdapter? = null
     private lateinit var viewBinding: ActivityMainBinding
 
+    private var searchView: SearchView? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -37,7 +37,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(viewBinding.root)
         initViews()
 
-        mainViewModel.onSearchQueryChanged("john")
+        if (savedInstanceState == null) {
+            mainViewModel.onSearchQueryChanged("john") //initial search query to fill the list
+        }
     }
 
     private fun initViews() {
@@ -45,21 +47,7 @@ class MainActivity : AppCompatActivity() {
         viewBinding.rvUserList.adapter =
             userListAdapter?.withLoadStateFooter(ListItemLoadStateAdapter { userListAdapter?.retry() })
 
-        userListAdapter?.addLoadStateListener { loadState ->
-            viewBinding.swipeRefresh.isRefreshing =
-                loadState.source.refresh is LoadState.Loading
-            viewBinding.btnRetry.isVisible = loadState.source.refresh is LoadState.Error
-
-            val errorState = loadState.source.append as? LoadState.Error
-                ?: loadState.append as? LoadState.Error
-                ?: loadState.source.prepend as? LoadState.Error
-                ?: loadState.prepend as? LoadState.Error
-                ?: loadState.source.refresh as? LoadState.Error
-
-            errorState?.let {
-                Toast.makeText(this, it.error.localizedMessage, Toast.LENGTH_SHORT).show()
-            }
-        }
+        userListAdapter?.addLoadStateListener { mainViewModel.onUserListLoadStateChange(it) }
 
         viewBinding.btnRetry.setOnClickListener { userListAdapter?.refresh() }
         viewBinding.swipeRefresh.setOnRefreshListener { userListAdapter?.refresh() }
@@ -68,18 +56,21 @@ class MainActivity : AppCompatActivity() {
             viewBinding.swipeRefresh.isRefreshing = false
             lifecycleScope.launch { userListAdapter?.submitData(it) }
         })
+
+        mainViewModel.showToast.observe(this, {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.user_search_option, menu)
         val searchItem = menu?.findItem(R.id.user_search)
-        val searchView = searchItem?.actionView as? SearchView
-
+        searchView = searchItem?.actionView as? SearchView
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null && query.trim().isEmpty().not()) {
                     mainViewModel.onSearchQueryChanged(query.trim())
-                    searchView.clearFocus()
+                    searchView?.clearFocus()
                     return true
                 }
                 return false
@@ -90,6 +81,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        return super.onCreateOptionsMenu(menu)
+        return true
     }
 }
