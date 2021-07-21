@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Github User</string>
     <string name="retry">Retry</string>
+    <string name="search">Search</string>
 </resources>

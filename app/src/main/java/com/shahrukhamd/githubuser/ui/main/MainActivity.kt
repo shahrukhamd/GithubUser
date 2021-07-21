@@ -8,12 +8,15 @@
 package com.shahrukhamd.githubuser.ui.main
 
 import android.os.Bundle
+import android.view.Menu
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
+import com.shahrukhamd.githubuser.R
 import com.shahrukhamd.githubuser.databinding.ActivityMainBinding
 import com.shahrukhamd.githubuser.ui.common.ListItemLoadStateAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,5 +68,28 @@ class MainActivity : AppCompatActivity() {
             viewBinding.swipeRefresh.isRefreshing = false
             lifecycleScope.launch { userListAdapter?.submitData(it) }
         })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.user_search_option, menu)
+        val searchItem = menu?.findItem(R.id.user_search)
+        val searchView = searchItem?.actionView as? SearchView
+
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null && query.trim().isEmpty().not()) {
+                    mainViewModel.onSearchQueryChanged(query.trim())
+                    searchView.clearFocus()
+                    return true
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
+
+        return super.onCreateOptionsMenu(menu)
     }
 }
