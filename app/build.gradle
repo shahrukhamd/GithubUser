@@ -43,6 +43,11 @@ android {
         viewBinding true
         dataBinding true
     }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+        unitTests.includeAndroidResources = true
+    }
 }
 
 dependencies {
@@ -84,4 +89,9 @@ dependencies {
 
     // pagination
     implementation "androidx.paging:paging-runtime-ktx:$pagingVersion"
+
+    // testing
+    testImplementation "io.mockk:mockk:$mockkVersion"
+    testImplementation "com.google.truth:truth:$truthVersion"
+    testImplementation "androidx.arch.core:core-testing:$archTestVersion"
 }
