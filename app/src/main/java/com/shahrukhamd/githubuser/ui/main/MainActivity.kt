@@ -52,6 +52,11 @@ class MainActivity : AppCompatActivity() {
         viewBinding.btnRetry.setOnClickListener { userListAdapter?.refresh() }
         viewBinding.swipeRefresh.setOnRefreshListener { userListAdapter?.refresh() }
 
+        mainViewModel.showRefreshingView.observe(this, {
+            // todo find out why app:refreshing="@{viewModel.showRefreshingView}" not working
+            viewBinding.swipeRefresh.isRefreshing = it
+        })
+
         mainViewModel.searchResponse.observe(this, {
             viewBinding.swipeRefresh.isRefreshing = false
             lifecycleScope.launch { userListAdapter?.submitData(it) }
@@ -82,5 +87,13 @@ class MainActivity : AppCompatActivity() {
         })
 
         return true
+    }
+
+    override fun onBackPressed() {
+        if (searchView != null && searchView?.isIconified == false) {
+            searchView?.onActionViewCollapsed()
+        } else {
+            super.onBackPressed()
+        }
     }
 }
