@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'kotlin-android-extensions'
+    id 'kotlin-parcelize'
     id 'dagger.hilt.android.plugin'
 }
 
@@ -77,7 +77,6 @@ dependencies {
     // di
     implementation "com.google.dagger:hilt-android:$hiltAndroidVersion"
     kapt "com.google.dagger:hilt-android-compiler:$hiltAndroidCompilerVersion"
-    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hiltLifecycleVersion"
     kapt "androidx.hilt:hilt-compiler:$hiltCompilerVersion"
 
     // coroutine
@@ -94,4 +93,6 @@ dependencies {
     testImplementation "io.mockk:mockk:$mockkVersion"
     testImplementation "com.google.truth:truth:$truthVersion"
     testImplementation "androidx.arch.core:core-testing:$archTestVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutineTest"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
 }

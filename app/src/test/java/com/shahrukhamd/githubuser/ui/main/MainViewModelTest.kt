@@ -8,6 +8,9 @@ import com.shahrukhamd.githubuser.data.repository.MainRepository
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.unmockkAll
+import io.mockk.verify
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -31,6 +34,11 @@ class MainViewModelTest {
     fun setup() {
         MockKAnnotations.init(this, relaxed = true)
         viewModel = MainViewModel(mainRepository)
+    }
+
+    @After
+    fun teardown() {
+        unmockkAll()
     }
 
     @Test
@@ -69,5 +77,12 @@ class MainViewModelTest {
         viewModel.onUserListLoadStateChange(combinedLoadStates)
 
         assertThat(viewModel.showToast.value).matches("some message")
+    }
+
+    @Test
+    fun `when called search query changes, repository api should be called with same query`() {
+        viewModel.onSearchQueryChanged("some query")
+
+        verify { mainRepository.getPaginatedUser("some query") }
     }
 }
