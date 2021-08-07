@@ -66,6 +66,7 @@ dependencies {
     implementation "com.google.android.material:material:$materialVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayout"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swipeRefreshVersion"
+    implementation "androidx.fragment:fragment-ktx:$fragmentVersion"
 
     // networking
     implementation "com.squareup.retrofit2:converter-moshi:$moshiVersion"

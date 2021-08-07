@@ -22,6 +22,7 @@ buildscript {
         recyclerView = "1.2.1"
         glideVersion = "4.11.0"
         swipeRefreshVersion = "1.1.0"
+        fragmentVersion = "1.3.6"
 
         // networking
         moshiVersion = "2.9.0"

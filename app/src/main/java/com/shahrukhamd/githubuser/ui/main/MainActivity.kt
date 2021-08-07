@@ -9,62 +9,32 @@ package com.shahrukhamd.githubuser.ui.main
 
 import android.os.Bundle
 import android.view.Menu
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.add
+import androidx.fragment.app.commit
 import com.shahrukhamd.githubuser.R
-import com.shahrukhamd.githubuser.databinding.ActivityMainBinding
-import com.shahrukhamd.githubuser.ui.common.ListItemLoadStateAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val mainViewModel: MainViewModel by viewModels()
-
-    private var userListAdapter: UserListRecyclerViewAdapter? = null
-    private lateinit var viewBinding: ActivityMainBinding
+    private val viewModel: MainViewModel by viewModels()
 
     private var searchView: SearchView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewBinding = ActivityMainBinding.inflate(layoutInflater)
-        viewBinding.viewModel = mainViewModel
-        setContentView(viewBinding.root)
-        initViews()
+        setContentView(R.layout.activity_main)
 
         if (savedInstanceState == null) {
-            mainViewModel.onSearchQueryChanged("john") //initial search query to fill the list
+            supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                add<UserListFragment>(R.id.main_fragment_container)
+            }
         }
-    }
 
-    private fun initViews() {
-        userListAdapter = UserListRecyclerViewAdapter()
-        viewBinding.rvUserList.adapter =
-            userListAdapter?.withLoadStateFooter(ListItemLoadStateAdapter { userListAdapter?.retry() })
-
-        userListAdapter?.addLoadStateListener { mainViewModel.onUserListLoadStateChange(it) }
-
-        viewBinding.btnRetry.setOnClickListener { userListAdapter?.refresh() }
-        viewBinding.swipeRefresh.setOnRefreshListener { userListAdapter?.refresh() }
-
-        mainViewModel.showRefreshingView.observe(this, {
-            // todo find out why app:refreshing="@{viewModel.showRefreshingView}" not working
-            viewBinding.swipeRefresh.isRefreshing = it
-        })
-
-        mainViewModel.searchResponse.observe(this, {
-            viewBinding.swipeRefresh.isRefreshing = false
-            lifecycleScope.launch { userListAdapter?.submitData(it) }
-        })
-
-        mainViewModel.showToast.observe(this, {
-            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -74,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null && query.trim().isEmpty().not()) {
-                    mainViewModel.onSearchQueryChanged(query.trim())
+                    viewModel.onSearchQueryChanged(query.trim())
                     searchView?.clearFocus()
                     return true
                 }
