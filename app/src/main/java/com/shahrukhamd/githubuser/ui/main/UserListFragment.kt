@@ -41,14 +41,13 @@ class UserListFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
-
-        if (savedInstanceState == null) {
-            viewModel.onSearchQueryChanged("john") //initial search query to fill the list
-        }
     }
 
     private fun initViews() {
-        userListAdapter = UserListRecyclerViewAdapter()
+        userListAdapter = UserListRecyclerViewAdapter { user ->
+            user?.let { viewModel.onUserListItemClicked(it) }
+        }
+
         viewBinding.rvUserList.adapter =
             userListAdapter?.withLoadStateFooter(ListItemLoadStateAdapter { userListAdapter?.retry() })
 

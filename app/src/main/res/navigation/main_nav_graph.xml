@@ -17,12 +17,20 @@
 
         <action
             android:id="@+id/action_userListFragment_to_userDetailFragment"
-            app:destination="@id/userDetailFragment" />
+            app:destination="@id/userDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
     </fragment>
 
     <fragment
         android:id="@+id/userDetailFragment"
         android:name="com.shahrukhamd.githubuser.ui.main.UserDetailFragment"
-        android:label="UserDetailFragment" />
+        android:label="UserDetailFragment" >
+        <argument
+            android:name="userItem"
+            app:argType="com.shahrukhamd.githubuser.data.model.GithubUser" />
+    </fragment>
 </navigation>
