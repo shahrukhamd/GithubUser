@@ -9,61 +9,36 @@ package com.shahrukhamd.githubuser.ui.main
 
 import android.os.Bundle
 import android.view.Menu
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import com.shahrukhamd.githubuser.R
-import com.shahrukhamd.githubuser.databinding.ActivityMainBinding
-import com.shahrukhamd.githubuser.ui.common.ListItemLoadStateAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val mainViewModel: MainViewModel by viewModels()
-
-    private var userListAdapter: UserListRecyclerViewAdapter? = null
-    private lateinit var viewBinding: ActivityMainBinding
+    private val viewModel: MainViewModel by viewModels()
 
     private var searchView: SearchView? = null
+    private lateinit var mainNavController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewBinding = ActivityMainBinding.inflate(layoutInflater)
-        viewBinding.viewModel = mainViewModel
-        setContentView(viewBinding.root)
-        initViews()
+        setContentView(R.layout.activity_main)
 
-        if (savedInstanceState == null) {
-            mainViewModel.onSearchQueryChanged("john") //initial search query to fill the list
-        }
+        initViews()
     }
 
     private fun initViews() {
-        userListAdapter = UserListRecyclerViewAdapter()
-        viewBinding.rvUserList.adapter =
-            userListAdapter?.withLoadStateFooter(ListItemLoadStateAdapter { userListAdapter?.retry() })
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.main_fragment_container) as NavHostFragment
+        mainNavController = navHostFragment.navController
 
-        userListAdapter?.addLoadStateListener { mainViewModel.onUserListLoadStateChange(it) }
-
-        viewBinding.btnRetry.setOnClickListener { userListAdapter?.refresh() }
-        viewBinding.swipeRefresh.setOnRefreshListener { userListAdapter?.refresh() }
-
-        mainViewModel.showRefreshingView.observe(this, {
-            // todo find out why app:refreshing="@{viewModel.showRefreshingView}" not working
-            viewBinding.swipeRefresh.isRefreshing = it
-        })
-
-        mainViewModel.searchResponse.observe(this, {
-            viewBinding.swipeRefresh.isRefreshing = false
-            lifecycleScope.launch { userListAdapter?.submitData(it) }
-        })
-
-        mainViewModel.showToast.observe(this, {
-            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        viewModel.navigateToUserDetail.observe(this, {
+            mainNavController.navigate(UserListFragmentDirections.actionUserListFragmentToUserDetailFragment(it))
         })
     }
 
@@ -74,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null && query.trim().isEmpty().not()) {
-                    mainViewModel.onSearchQueryChanged(query.trim())
+                    viewModel.onSearchQueryChanged(query.trim())
                     searchView?.clearFocus()
                     return true
                 }

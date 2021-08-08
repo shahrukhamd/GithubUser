@@ -37,6 +37,9 @@ class MainViewModel @Inject constructor(private var mainRepository: MainReposito
     private val _showToast = MutableLiveData<String>()
     val showToast: LiveData<String> = _showToast
 
+    private val _navigateToUserDetail = MutableLiveData<GithubUser>()
+    val navigateToUserDetail: LiveData<GithubUser> = _navigateToUserDetail
+
     fun onSearchQueryChanged(query: String) {
         viewModelScope.launch {
             mainRepository.getPaginatedUser(query).cachedIn(this).collectLatest {
@@ -58,4 +61,7 @@ class MainViewModel @Inject constructor(private var mainRepository: MainReposito
         errorState?.let { _showToast.value = it.error.localizedMessage }
     }
 
+    fun onUserListItemClicked(user: GithubUser) {
+        _navigateToUserDetail.value = user
+    }
 }

@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
     id 'dagger.hilt.android.plugin'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 android {
@@ -31,12 +32,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '11'
     }
 
     buildFeatures {
@@ -66,6 +67,7 @@ dependencies {
     implementation "com.google.android.material:material:$materialVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayout"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swipeRefreshVersion"
+    implementation "androidx.fragment:fragment-ktx:$fragmentVersion"
 
     // networking
     implementation "com.squareup.retrofit2:converter-moshi:$moshiVersion"
@@ -88,6 +90,10 @@ dependencies {
 
     // pagination
     implementation "androidx.paging:paging-runtime-ktx:$pagingVersion"
+
+    // navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
 
     // testing
     testImplementation "io.mockk:mockk:$mockkVersion"
