@@ -48,7 +48,10 @@ class UserListFragment: Fragment() {
     }
 
     private fun initViews() {
-        userListAdapter = UserListRecyclerViewAdapter()
+        userListAdapter = UserListRecyclerViewAdapter { user ->
+            user?.let { viewModel.onUserListItemClicked(it) }
+        }
+
         viewBinding.rvUserList.adapter =
             userListAdapter?.withLoadStateFooter(ListItemLoadStateAdapter { userListAdapter?.retry() })
 

@@ -12,8 +12,8 @@ import android.view.Menu
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.add
-import androidx.fragment.app.commit
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import com.shahrukhamd.githubuser.R
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,18 +23,23 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
 
     private var searchView: SearchView? = null
+    private lateinit var mainNavController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if (savedInstanceState == null) {
-            supportFragmentManager.commit {
-                setReorderingAllowed(true)
-                add<UserListFragment>(R.id.main_fragment_container)
-            }
-        }
+        initViews()
+    }
 
+    private fun initViews() {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.main_fragment_container) as NavHostFragment
+        mainNavController = navHostFragment.navController
+
+        viewModel.navigateToUserDetail.observe(this, {
+            mainNavController.navigate(UserListFragmentDirections.actionUserListFragmentToUserDetailFragment(it))
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
