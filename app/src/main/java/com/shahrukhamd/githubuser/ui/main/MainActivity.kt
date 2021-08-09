@@ -7,6 +7,8 @@
 
 package com.shahrukhamd.githubuser.ui.main
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import androidx.activity.viewModels
@@ -44,6 +46,25 @@ class MainActivity : AppCompatActivity() {
                     UserListFragmentDirections.actionUserListFragmentToUserDetailFragment(it)
                 )
             }
+        })
+
+        viewModel.onUserShare.observe(this, {
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, it)
+                type = "text/plain"
+            }
+
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            startActivity(shareIntent)
+        })
+
+        viewModel.onUserProfileOpen.observe(this, {
+            val openIntent: Intent = Intent().apply {
+                action = Intent.ACTION_VIEW
+                data = Uri.parse(it)
+            }
+            startActivity(openIntent)
         })
     }
 
