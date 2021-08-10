@@ -25,8 +25,6 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(private var mainRepository: MainRepository) : ViewModel() {
 
-    private var currentUserDetail: GithubUser? = null
-
     private val _searchResponse = MutableLiveData<PagingData<GithubUser>>()
     val searchResponse: LiveData<PagingData<GithubUser>> = _searchResponse
 
@@ -77,20 +75,31 @@ class MainViewModel @Inject constructor(private var mainRepository: MainReposito
         errorState?.let { _showToast.value = it.error.localizedMessage }
     }
 
+    fun getCurrentUserDetails() {
+        // todo refactor this to show loading, error and other scenarios
+        val userName = _userDetailUpdated.value?.login
+        userName?.let {
+            viewModelScope.launch {
+                mainRepository.getUserDetails(it)?.let {
+                    _userDetailUpdated.value = it
+                }
+            }
+        }
+    }
+
     fun onUserListItemClicked(user: GithubUser) {
         _navigateToUserDetail.value = user
         _userDetailUpdated.value = user
-        currentUserDetail = user
     }
 
     fun onUserShareButtonClick() {
-        currentUserDetail?.htmlUrl?.let {
+        _userDetailUpdated.value?.htmlUrl?.let {
             _onUserShare.value = it
         }
     }
 
     fun onUserProfileOpenButtonClick() {
-        currentUserDetail?.htmlUrl?.let {
+        _userDetailUpdated.value?.htmlUrl?.let {
             _onUserProfileOpen.value = it
         }
     }

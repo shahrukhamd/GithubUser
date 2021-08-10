@@ -26,4 +26,9 @@ class MainRepository @Inject constructor(private val service: GithubService) {
             pagingSourceFactory = { GithubPagingSource(service, query) }
         ).flow
     }
+
+    suspend fun getUserDetails(username: String): GithubUser? {
+        // todo refactor this for more error handling
+        return service.getUserDetails(username).body()
+    }
 }

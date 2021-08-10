@@ -28,14 +28,15 @@ class UserDetailFragment: Fragment(R.layout.fragment_user_details) {
         savedInstanceState: Bundle?
     ): View {
         viewBinding = FragmentUserDetailsBinding.inflate(inflater, container, false)
+        viewBinding.lifecycleOwner = viewLifecycleOwner
         viewBinding.viewModel = viewModel
-
         return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
+        viewModel.getCurrentUserDetails()
     }
 
     private fun initViews() {

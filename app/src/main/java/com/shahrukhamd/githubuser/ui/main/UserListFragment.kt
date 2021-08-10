@@ -33,6 +33,7 @@ class UserListFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
         viewBinding = FragmentUserListBinding.inflate(inflater, container, false)
+        viewBinding.lifecycleOwner = viewLifecycleOwner
         viewBinding.viewModel = viewModel
 
         return viewBinding.root
@@ -55,11 +56,6 @@ class UserListFragment: Fragment() {
 
         viewBinding.btnRetry.setOnClickListener { userListAdapter?.refresh() }
         viewBinding.swipeRefresh.setOnRefreshListener { userListAdapter?.refresh() }
-
-        viewModel.showRefreshingView.observe(viewLifecycleOwner, {
-            // todo find out why app:refreshing="@{viewModel.showRefreshingView}" not working
-            viewBinding.swipeRefresh.isRefreshing = it
-        })
 
         viewModel.searchResponse.observe(viewLifecycleOwner, {
             viewBinding.swipeRefresh.isRefreshing = false

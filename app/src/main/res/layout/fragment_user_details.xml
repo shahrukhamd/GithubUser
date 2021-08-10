@@ -104,10 +104,6 @@
                 app:drawableStartCompat="@drawable/ic_web_18px"
                 tools:text="shahrukhamd.com" />
 
-            <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
