@@ -8,11 +8,16 @@
 package com.shahrukhamd.githubuser.data.api
 
 import com.shahrukhamd.githubuser.data.model.ApiUserSearchResponse
+import com.shahrukhamd.githubuser.data.model.GithubUser
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface GithubService {
     @GET("/search/users")
     suspend fun getPaginatedUser(@Query("q") query: String, @Query("page") page: Int): Response<ApiUserSearchResponse>
+
+    @GET("/users/{username}")
+    suspend fun getUserDetails(@Path("username") username: String): Response<GithubUser>
 }

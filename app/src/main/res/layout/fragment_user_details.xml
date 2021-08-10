@@ -1,20 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.shahrukhamd.githubuser.ui.main.MainViewModel" />
+
+    </data>
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="This is the user details fragment"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="10dp">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:onClick="@{() -> viewModel.onUserShareButtonClick()}"
+                android:padding="10dp"
+                android:src="@drawable/ic_share_24px" />
 
+            <ImageView
+                android:id="@+id/user_detail_image"
+                loadImage="@{viewModel.userDetailUpdated.avatarUrl}"
+                placeholder="@{@drawable/ic_user_default}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_user_default" />
+
+            <TextView
+                android:id="@+id/user_detail_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="sans-serif-black"
+                android:gravity="center"
+                android:text="@{viewModel.userDetailUpdated.name}"
+                android:textSize="28sp"
+                tools:text="@tools:sample/full_names" />
+
+            <TextView
+                android:id="@+id/user_bio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="6"
+                android:text="@{viewModel.userDetailUpdated.bio}"
+                android:textSize="16sp"
+                tools:text="@tools:sample/lorem/random" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:drawablePadding="10dp"
+                android:text="@{viewModel.userDetailUpdated.email}"
+                app:drawableStartCompat="@drawable/ic_email_18px"
+                tools:text="shahrukhamd@gmail.com" />
+
+            <TextView
+                android:id="@+id/user_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:drawablePadding="10dp"
+                android:text="@{viewModel.userDetailUpdated.location}"
+                app:drawableStartCompat="@drawable/ic_location_18px"
+                tools:text="Located in Hong Kong" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:drawablePadding="10dp"
+                android:text="@{viewModel.userDetailUpdated.twitterUsername}"
+                app:drawableStartCompat="@drawable/ic_twitter_18px"
+                tools:text="shahrukhamd" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:drawablePadding="10dp"
+                android:text="@{viewModel.userDetailUpdated.blog}"
+                app:drawableStartCompat="@drawable/ic_web_18px"
+                tools:text="shahrukhamd.com" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:onClick="@{() -> viewModel.onUserProfileOpenButtonClick()}"
+                android:padding="15sp"
+                android:text="@string/open_profile" />
+
+        </LinearLayout>
+    </ScrollView>
 </layout>

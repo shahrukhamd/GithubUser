@@ -40,6 +40,20 @@ class MainViewModel @Inject constructor(private var mainRepository: MainReposito
     private val _navigateToUserDetail = MutableLiveData<GithubUser>()
     val navigateToUserDetail: LiveData<GithubUser> = _navigateToUserDetail
 
+    private val _userDetailUpdated = MutableLiveData<GithubUser>()
+    val userDetailUpdated: LiveData<GithubUser> = _userDetailUpdated
+
+    private val _onUserShare = MutableLiveData<String>()
+    val onUserShare: LiveData<String> = _onUserShare
+
+    private val _onUserProfileOpen = MutableLiveData<String>()
+    val onUserProfileOpen: LiveData<String> = _onUserProfileOpen
+
+    init {
+        // todo remove this logic and implement view for when there's no query
+        onSearchQueryChanged("john") // initial search query to fill the list
+    }
+
     fun onSearchQueryChanged(query: String) {
         viewModelScope.launch {
             mainRepository.getPaginatedUser(query).cachedIn(this).collectLatest {
@@ -61,7 +75,32 @@ class MainViewModel @Inject constructor(private var mainRepository: MainReposito
         errorState?.let { _showToast.value = it.error.localizedMessage }
     }
 
+    fun getCurrentUserDetails() {
+        // todo refactor this to show loading, error and other scenarios
+        val userName = _userDetailUpdated.value?.login
+        userName?.let {
+            viewModelScope.launch {
+                mainRepository.getUserDetails(it)?.let {
+                    _userDetailUpdated.value = it
+                }
+            }
+        }
+    }
+
     fun onUserListItemClicked(user: GithubUser) {
         _navigateToUserDetail.value = user
+        _userDetailUpdated.value = user
+    }
+
+    fun onUserShareButtonClick() {
+        _userDetailUpdated.value?.htmlUrl?.let {
+            _onUserShare.value = it
+        }
+    }
+
+    fun onUserProfileOpenButtonClick() {
+        _userDetailUpdated.value?.htmlUrl?.let {
+            _onUserProfileOpen.value = it
+        }
     }
 }
