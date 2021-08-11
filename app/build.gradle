@@ -61,13 +61,12 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
     implementation "androidx.fragment:fragment-ktx:$fragmentVersion"
 
-    // view
+    // ui
     implementation "androidx.recyclerview:recyclerview:$recyclerView"
     implementation "com.github.bumptech.glide:glide:$glideVersion"
     implementation "com.google.android.material:material:$materialVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayout"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swipeRefreshVersion"
-    implementation "androidx.fragment:fragment-ktx:$fragmentVersion"
 
     // networking
     implementation "com.squareup.retrofit2:converter-moshi:$moshiVersion"
@@ -77,9 +76,8 @@ dependencies {
     implementation "com.squareup.moshi:moshi-kotlin:$moshiKotlinVersion"
 
     // di
-    implementation "com.google.dagger:hilt-android:$hiltAndroidVersion"
-    kapt "com.google.dagger:hilt-android-compiler:$hiltAndroidCompilerVersion"
-    kapt "androidx.hilt:hilt-compiler:$hiltCompilerVersion"
+    implementation "com.google.dagger:hilt-android:$hiltVersion"
+    kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
 
     // coroutine
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineCoreVersion"
