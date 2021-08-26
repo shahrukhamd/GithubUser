@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="userModel"
             type="com.shahrukhamd.githubuser.data.model.GithubUser" />
@@ -12,31 +11,39 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="12dp">
+        android:layout_height="wrap_content">
 
-        <ImageView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/user_item_image"
-            circleCropEnabled="@{true}"
-            loadImage="@{userModel.avatarUrl}"
-            placeholder="@{@drawable/ic_user_default_48px}"
-            android:layout_width="@dimen/main_list_user_icon_width_height"
-            android:layout_height="@dimen/main_list_user_icon_width_height"
-            android:src="@drawable/ic_user_default_48px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:cardCornerRadius="@{@dimen/main_list_user_icon_size/2}"
+            app:cardElevation="6dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                circleCropEnabled="@{false}"
+                loadImage="@{userModel.avatarUrl}"
+                placeholder="@{@drawable/ic_user_default_200px}"
+                android:layout_width="@dimen/main_list_user_icon_size"
+                android:layout_height="@dimen/main_list_user_icon_size"
+                android:src="@drawable/ic_user_default_200px" />
+
+        </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:id="@+id/user_item_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="16dp"
             android:ellipsize="end"
-            android:fontFamily="sans-serif-medium"
             android:maxLines="2"
             android:text="@{userModel.login}"
-            android:textSize="20sp"
+            android:textSize="22sp"
+            android:fontFamily="sans-serif-light"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.488"
@@ -44,14 +51,7 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@tools:sample/full_names" />
 
-        <TextView
-            android:id="@+id/user_item_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{userModel.id.toString()}"
-            app:layout_constraintBottom_toBottomOf="@+id/user_item_image"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="123345" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
