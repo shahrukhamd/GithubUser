@@ -17,6 +17,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.shahrukhamd.githubuser.R
+import com.shahrukhamd.githubuser.utils.DebouncingQueryTextListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -72,18 +73,10 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.user_search_option, menu)
         val searchItem = menu?.findItem(R.id.user_search)
         searchView = searchItem?.actionView as? SearchView
-        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                if (query != null && query.trim().isEmpty().not()) {
-                    viewModel.onSearchQueryChanged(query.trim())
-                    searchView?.clearFocus()
-                    return true
-                }
-                return false
-            }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return false
+        searchView?.setOnQueryTextListener(DebouncingQueryTextListener(lifecycle) {
+            if (it.isNotEmpty()) {
+                viewModel.onSearchQueryChanged(it.trim())
             }
         })
 
