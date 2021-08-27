@@ -14,8 +14,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.shahrukhamd.githubuser.databinding.FragmentUserListBinding
 import com.shahrukhamd.githubuser.ui.common.ListItemLoadStateAdapter
+import com.shahrukhamd.githubuser.utils.EventObserver
 import com.shahrukhamd.githubuser.utils.showToast
 import kotlinx.coroutines.launch
 
@@ -62,8 +64,14 @@ class UserListFragment: Fragment() {
             lifecycleScope.launch { userListAdapter?.submitData(it) }
         })
 
-        viewModel.showToast.observe(viewLifecycleOwner, {
+        viewModel.showToast.observe(viewLifecycleOwner, EventObserver {
             context?.showToast(it)
+        })
+
+        viewModel.navigateToUserDetail.observe(viewLifecycleOwner, EventObserver {
+            findNavController().navigate(
+                UserListFragmentDirections.actionUserListFragmentToUserDetailFragment(it)
+            )
         })
     }
 }

@@ -17,6 +17,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.shahrukhamd.githubuser.data.model.GithubUser
 import com.shahrukhamd.githubuser.data.repository.MainRepository
+import com.shahrukhamd.githubuser.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -28,26 +29,26 @@ class MainViewModel @Inject constructor(private var mainRepository: MainReposito
     private val _searchResponse = MutableLiveData<PagingData<GithubUser>>()
     val searchResponse: LiveData<PagingData<GithubUser>> = _searchResponse
 
-    private val _showRefreshingView = MutableLiveData<Boolean>()
-    val showRefreshingView: LiveData<Boolean> = _showRefreshingView
+    private val _showRefreshingView = MutableLiveData<Event<Boolean>>()
+    val showRefreshingView: LiveData<Event<Boolean>> = _showRefreshingView
 
-    private val _showRetryButton = MutableLiveData<Boolean>()
-    val showRetryButton: LiveData<Boolean> = _showRetryButton
+    private val _showRetryButton = MutableLiveData<Event<Boolean>>()
+    val showRetryButton: LiveData<Event<Boolean>> = _showRetryButton
 
-    private val _showToast = MutableLiveData<String>()
-    val showToast: LiveData<String> = _showToast
+    private val _showToast = MutableLiveData<Event<String>>()
+    val showToast: LiveData<Event<String>> = _showToast
 
-    private val _navigateToUserDetail = MutableLiveData<GithubUser>()
-    val navigateToUserDetail: LiveData<GithubUser> = _navigateToUserDetail
+    private val _navigateToUserDetail = MutableLiveData<Event<GithubUser>>()
+    val navigateToUserDetail: LiveData<Event<GithubUser>> = _navigateToUserDetail
 
     private val _userDetailUpdated = MutableLiveData<GithubUser>()
     val userDetailUpdated: LiveData<GithubUser> = _userDetailUpdated
 
-    private val _onUserShare = MutableLiveData<String>()
-    val onUserShare: LiveData<String> = _onUserShare
+    private val _onUserShare = MutableLiveData<Event<String>>()
+    val onUserShare: LiveData<Event<String>> = _onUserShare
 
-    private val _onUserProfileOpen = MutableLiveData<String>()
-    val onUserProfileOpen: LiveData<String> = _onUserProfileOpen
+    private val _onUserProfileOpen = MutableLiveData<Event<String>>()
+    val onUserProfileOpen: LiveData<Event<String>> = _onUserProfileOpen
 
     init {
         // todo remove this logic and implement view for when there's no query
@@ -63,8 +64,8 @@ class MainViewModel @Inject constructor(private var mainRepository: MainReposito
     }
 
     fun onUserListLoadStateChange(loadState: CombinedLoadStates) {
-        _showRefreshingView.value = loadState.source.refresh is LoadState.Loading
-        _showRetryButton.value = loadState.source.refresh is LoadState.Error
+        _showRefreshingView.value = Event(loadState.source.refresh is LoadState.Loading)
+        _showRetryButton.value = Event(loadState.source.refresh is LoadState.Error)
 
         val errorState = loadState.source.append as? LoadState.Error
             ?: loadState.append as? LoadState.Error
@@ -72,7 +73,7 @@ class MainViewModel @Inject constructor(private var mainRepository: MainReposito
             ?: loadState.prepend as? LoadState.Error
             ?: loadState.source.refresh as? LoadState.Error
 
-        errorState?.let { _showToast.value = it.error.localizedMessage }
+        errorState?.let { _showToast.value = Event(it.error.localizedMessage) }
     }
 
     fun getCurrentUserDetails() {
@@ -88,19 +89,19 @@ class MainViewModel @Inject constructor(private var mainRepository: MainReposito
     }
 
     fun onUserListItemClicked(user: GithubUser) {
-        _navigateToUserDetail.value = user
+        _navigateToUserDetail.value = Event(user)
         _userDetailUpdated.value = user
     }
 
     fun onUserShareButtonClick() {
         _userDetailUpdated.value?.htmlUrl?.let {
-            _onUserShare.value = it
+            _onUserShare.value = Event(it)
         }
     }
 
     fun onUserProfileOpenButtonClick() {
         _userDetailUpdated.value?.htmlUrl?.let {
-            _onUserProfileOpen.value = it
+            _onUserProfileOpen.value = Event(it)
         }
     }
 }
