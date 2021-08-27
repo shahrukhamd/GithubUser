@@ -17,11 +17,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.shahrukhamd.githubuser.databinding.FragmentUserListBinding
 import com.shahrukhamd.githubuser.ui.common.ListItemLoadStateAdapter
+import com.shahrukhamd.githubuser.utils.DebouncingQueryTextListener
 import com.shahrukhamd.githubuser.utils.EventObserver
 import com.shahrukhamd.githubuser.utils.showToast
 import kotlinx.coroutines.launch
 
-class UserListFragment: Fragment() {
+class UserListFragment : Fragment() {
 
     private val viewModel: MainViewModel by activityViewModels()
 
@@ -44,6 +45,7 @@ class UserListFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
+        initObserver()
     }
 
     private fun initViews() {
@@ -59,6 +61,16 @@ class UserListFragment: Fragment() {
         viewBinding.btnRetry.setOnClickListener { userListAdapter?.refresh() }
         viewBinding.swipeRefresh.setOnRefreshListener { userListAdapter?.refresh() }
 
+        viewBinding.svUserSearch.setOnQueryTextListener(
+            DebouncingQueryTextListener(lifecycle) {
+                if (it.isNotEmpty()) {
+                    viewModel.onSearchQueryChanged(it.trim())
+                }
+            }
+        )
+    }
+
+    private fun initObserver() {
         viewModel.searchResponse.observe(viewLifecycleOwner, {
             viewBinding.swipeRefresh.isRefreshing = false
             lifecycleScope.launch { userListAdapter?.submitData(it) }

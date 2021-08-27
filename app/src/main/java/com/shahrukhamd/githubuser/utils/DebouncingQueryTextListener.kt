@@ -1,6 +1,6 @@
 package com.shahrukhamd.githubuser.utils
 
-import androidx.appcompat.widget.SearchView
+import android.widget.SearchView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import kotlinx.coroutines.Job
