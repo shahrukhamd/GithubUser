@@ -5,7 +5,7 @@
  * terms of the MIT license - https://opensource.org/licenses/MIT
  */
 
-package com.shahrukhamd.githubuser.ui.main
+package com.shahrukhamd.githubuser.ui.search
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 
 class UserListFragment : Fragment() {
 
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: SearchViewModel by activityViewModels()
 
     private lateinit var viewBinding: FragmentUserListBinding
 

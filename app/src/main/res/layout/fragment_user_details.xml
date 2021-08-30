@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.shahrukhamd.githubuser.ui.main.MainViewModel" />
+            type="com.shahrukhamd.githubuser.ui.search.SearchViewModel" />
 
     </data>
 

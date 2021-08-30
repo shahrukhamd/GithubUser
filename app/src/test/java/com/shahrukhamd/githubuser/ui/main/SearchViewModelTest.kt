@@ -5,6 +5,7 @@ import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import com.google.common.truth.Truth.assertThat
 import com.shahrukhamd.githubuser.data.repository.MainRepository
+import com.shahrukhamd.githubuser.ui.search.SearchViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -15,7 +16,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class MainViewModelTest {
+class SearchViewModelTest {
 
     // Run tasks synchronously
     @Rule
@@ -28,12 +29,12 @@ class MainViewModelTest {
     @MockK
     private lateinit var mainRepository: MainRepository
 
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: SearchViewModel
 
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxed = true)
-        viewModel = MainViewModel(mainRepository)
+        viewModel = SearchViewModel(mainRepository)
     }
 
     @After

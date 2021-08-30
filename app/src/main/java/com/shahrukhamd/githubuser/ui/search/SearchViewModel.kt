@@ -5,7 +5,7 @@
  * terms of the MIT license - https://opensource.org/licenses/MIT
  */
 
-package com.shahrukhamd.githubuser.ui.main
+package com.shahrukhamd.githubuser.ui.search
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private var mainRepository: MainRepository) : ViewModel() {
+class SearchViewModel @Inject constructor(private var mainRepository: MainRepository) : ViewModel() {
 
     private val _searchResponse = MutableLiveData<PagingData<GithubUser>>()
     val searchResponse: LiveData<PagingData<GithubUser>> = _searchResponse

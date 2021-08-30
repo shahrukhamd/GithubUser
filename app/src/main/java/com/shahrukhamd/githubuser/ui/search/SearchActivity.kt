@@ -5,7 +5,7 @@
  * terms of the MIT license - https://opensource.org/licenses/MIT
  */
 
-package com.shahrukhamd.githubuser.ui.main
+package com.shahrukhamd.githubuser.ui.search
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +13,7 @@ import com.shahrukhamd.githubuser.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

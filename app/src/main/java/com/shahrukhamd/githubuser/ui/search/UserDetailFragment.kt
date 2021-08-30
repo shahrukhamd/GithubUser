@@ -5,7 +5,7 @@
  * terms of the MIT license - https://opensource.org/licenses/MIT
  */
 
-package com.shahrukhamd.githubuser.ui.main
+package com.shahrukhamd.githubuser.ui.search
 
 import android.content.Intent
 import android.net.Uri
@@ -22,7 +22,7 @@ import com.shahrukhamd.githubuser.utils.EventObserver
 
 class UserDetailFragment: Fragment(R.layout.fragment_user_details) {
 
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: SearchViewModel by activityViewModels()
 
     private lateinit var viewBinding: FragmentUserDetailsBinding
 
