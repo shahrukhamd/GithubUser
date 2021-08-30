@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.ExperimentalPagingApi
 import com.shahrukhamd.githubuser.databinding.FragmentUserListBinding
 import com.shahrukhamd.githubuser.ui.common.ListItemLoadStateAdapter
 import com.shahrukhamd.githubuser.utils.DebouncingQueryTextListener
@@ -22,6 +23,7 @@ import com.shahrukhamd.githubuser.utils.EventObserver
 import com.shahrukhamd.githubuser.utils.showToast
 import kotlinx.coroutines.launch
 
+@ExperimentalPagingApi
 class UserListFragment : Fragment() {
 
     private val viewModel: SearchViewModel by activityViewModels()
@@ -35,10 +37,10 @@ class UserListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewBinding = FragmentUserListBinding.inflate(inflater, container, false)
-        viewBinding.lifecycleOwner = viewLifecycleOwner
-        viewBinding.viewModel = viewModel
-
+        viewBinding = FragmentUserListBinding.inflate(inflater, container, false).apply {
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = this@UserListFragment.viewModel
+        }
         return viewBinding.root
     }
 
@@ -49,9 +51,7 @@ class UserListFragment : Fragment() {
     }
 
     private fun initViews() {
-        userListAdapter = UserListRecyclerViewAdapter { user ->
-            user?.let { viewModel.onUserListItemClicked(it) }
-        }
+        userListAdapter = UserListRecyclerViewAdapter(viewModel)
 
         viewBinding.rvUserList.adapter =
             userListAdapter?.withLoadStateFooter(ListItemLoadStateAdapter { userListAdapter?.retry() })
@@ -76,13 +76,19 @@ class UserListFragment : Fragment() {
             lifecycleScope.launch { userListAdapter?.submitData(it) }
         })
 
+        viewModel.onUserDetailUpdate.observe(viewLifecycleOwner, {
+            lifecycleScope.launch {
+                userListAdapter?.notifyItemChanged(it.first, it.second)
+            }
+        })
+
         viewModel.showToast.observe(viewLifecycleOwner, EventObserver {
             context?.showToast(it)
         })
 
-        viewModel.navigateToUserDetail.observe(viewLifecycleOwner, EventObserver {
+        viewModel.showUserDetails.observe(viewLifecycleOwner, EventObserver {
             findNavController().navigate(
-                UserListFragmentDirections.actionUserListFragmentToUserDetailFragment(it)
+                UserListFragmentDirections.actionUserListFragmentToUserDetailFragment()
             )
         })
     }

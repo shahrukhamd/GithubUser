@@ -16,7 +16,7 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.shahrukhamd.githubuser.data.model.GithubUser
-import com.shahrukhamd.githubuser.data.repository.MainRepository
+import com.shahrukhamd.githubuser.data.repository.SearchRepository
 import com.shahrukhamd.githubuser.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchViewModel @Inject constructor(private var mainRepository: MainRepository) : ViewModel() {
+class SearchViewModel @Inject constructor(private var searchRepository: SearchRepository) : ViewModel() {
 
     private val _searchResponse = MutableLiveData<PagingData<GithubUser>>()
     val searchResponse: LiveData<PagingData<GithubUser>> = _searchResponse
@@ -38,11 +38,8 @@ class SearchViewModel @Inject constructor(private var mainRepository: MainReposi
     private val _showToast = MutableLiveData<Event<String>>()
     val showToast: LiveData<Event<String>> = _showToast
 
-    private val _navigateToUserDetail = MutableLiveData<Event<GithubUser>>()
-    val navigateToUserDetail: LiveData<Event<GithubUser>> = _navigateToUserDetail
-
-    private val _userDetailUpdated = MutableLiveData<GithubUser>()
-    val userDetailUpdated: LiveData<GithubUser> = _userDetailUpdated
+    private val _showUserDetails = MutableLiveData<Event<Boolean>>()
+    val showUserDetails: LiveData<Event<Boolean>> = _showUserDetails
 
     private val _onUserShare = MutableLiveData<Event<String>>()
     val onUserShare: LiveData<Event<String>> = _onUserShare
@@ -53,6 +50,9 @@ class SearchViewModel @Inject constructor(private var mainRepository: MainReposi
     private val _onCloseProfileDetails = MutableLiveData<Event<Boolean>>()
     val onCloseProfileDetails: LiveData<Event<Boolean>> = _onCloseProfileDetails
 
+    private val _onUserDetailUpdate = MutableLiveData<Pair<Int, GithubUser>>()
+    val onUserDetailUpdate: LiveData<Pair<Int, GithubUser>> = _onUserDetailUpdate
+
     init {
         // todo remove this logic and implement view for when there's no query
         onSearchQueryChanged("john") // initial search query to fill the list
@@ -60,7 +60,7 @@ class SearchViewModel @Inject constructor(private var mainRepository: MainReposi
 
     fun onSearchQueryChanged(query: String) {
         viewModelScope.launch {
-            mainRepository.getPaginatedUser(query).cachedIn(this).collectLatest {
+            searchRepository.getPaginatedUser(query).cachedIn(this).collectLatest {
                 _searchResponse.postValue(it)
             }
         }
@@ -79,36 +79,42 @@ class SearchViewModel @Inject constructor(private var mainRepository: MainReposi
         errorState?.let { _showToast.value = Event(it.error.localizedMessage) }
     }
 
-    fun getCurrentUserDetails() {
-        // todo refactor this to show loading, error and other scenarios
-        val userName = _userDetailUpdated.value?.login
-        userName?.let {
+    fun getDetailScreenUserDetails() {
+        _onUserDetailUpdate.value?.let {
             viewModelScope.launch {
-                mainRepository.getUserDetails(it)?.let {
-                    _userDetailUpdated.value = it
+                searchRepository.getUserDetailsAndUpdateDb(it.second.login.orEmpty())?.let {
+                        userUpdate -> _onUserDetailUpdate.value = Pair(it.first, it.second.copy(userUpdate))
                 }
             }
         }
     }
 
-    fun onUserListItemClicked(user: GithubUser) {
-        _navigateToUserDetail.value = Event(user)
-        _userDetailUpdated.value = user
+    fun onUserListItemClicked(user: GithubUser, position: Int) {
+        _showUserDetails.value = Event(true)
+        _onUserDetailUpdate.value = Pair(position, user)
     }
 
-    fun onUserShareButtonClick() {
-        _userDetailUpdated.value?.htmlUrl?.let {
+    fun onUserProfileShareClick() {
+        _onUserDetailUpdate.value?.second?.htmlUrl?.let {
             _onUserShare.value = Event(it)
         }
     }
 
-    fun onUserProfileOpenButtonClick() {
-        _userDetailUpdated.value?.htmlUrl?.let {
+    fun onUserProfileOpenClick() {
+        _onUserDetailUpdate.value?.second?.htmlUrl?.let {
             _onUserProfileOpen.value = Event(it)
         }
     }
 
     fun onProfileCloseClick() {
         _onCloseProfileDetails.value = Event(true)
+    }
+
+    fun onUserStarClick(position: Int, user: GithubUser) {
+        viewModelScope.launch {
+            user.isUserStared = !user.isUserStared
+            searchRepository.updateUser(user)
+            _onUserDetailUpdate.postValue(Pair(position, user))
+        }
     }
 }

@@ -16,8 +16,13 @@ import retrofit2.http.Query
 
 interface GithubService {
     @GET("/search/users")
-    suspend fun getPaginatedUser(@Query("q") query: String, @Query("page") page: Int): Response<ApiUserSearchResponse>
+    suspend fun getPaginatedUser(
+        @Query("q") query: String,
+        @Query("page") page: Int
+    ): Response<ApiUserSearchResponse>
 
     @GET("/users/{username}")
-    suspend fun getUserDetails(@Path("username") username: String): Response<GithubUser>
+    suspend fun getUserDetails(
+        @Path("username") username: String
+    ): Response<GithubUser>
 }

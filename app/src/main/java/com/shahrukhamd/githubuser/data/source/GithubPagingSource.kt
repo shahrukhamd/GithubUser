@@ -1,15 +1,21 @@
 package com.shahrukhamd.githubuser.data.source
 
 import androidx.paging.PagingSource
+import androidx.paging.PagingSource.LoadResult
 import androidx.paging.PagingState
 import com.shahrukhamd.githubuser.data.api.GithubService
+import com.shahrukhamd.githubuser.data.base.AppDatabase
 import com.shahrukhamd.githubuser.data.model.GithubUser
 import retrofit2.HttpException
 import java.io.IOException
 
 private const val STARTING_PAGE_INDEX = 1
 
+/**
+ * A simple implementation of the [PagingSource] which will fetch the data from Github API and return the [LoadResult]
+ */
 class GithubPagingSource(
+    private val database: AppDatabase,
     private val service: GithubService,
     private val query: String
 ) : PagingSource<Int, GithubUser>() {
@@ -23,10 +29,17 @@ class GithubPagingSource(
             } else {
                 position + 1
             }
+
+            val dbStaredUsers = database.userItemDao().getStaredUsers()
+            val remoteUsers = response.body()?.items.orEmpty()
+            remoteUsers.map { user ->
+                user.isUserStared = dbStaredUsers.find { it.id == user.id }?.isUserStared == true
+            }
+
             when (response.code()) {
                 200 ->
                     LoadResult.Page(
-                        data = response.body()?.items.orEmpty(),
+                        data = remoteUsers,
                         prevKey = if (position == STARTING_PAGE_INDEX) null else position - 1,
                         nextKey = nextPage
                     )

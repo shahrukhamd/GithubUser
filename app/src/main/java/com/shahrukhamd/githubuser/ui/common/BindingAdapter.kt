@@ -7,6 +7,7 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.shahrukhamd.githubuser.R
 
 /**
  * @param isVisible boolean value to change visibility of a view
@@ -40,4 +41,12 @@ fun ImageView.loadImage(url: String?, placeholder: Drawable?, circleCropEnabled:
 @BindingAdapter(value = ["dividerItemDecorationOrientation"])
 fun RecyclerView.setDividerItemDecoration(dividerItemDecorationOrientation: Int) {
     addItemDecoration(DividerItemDecoration(context, dividerItemDecorationOrientation))
+}
+
+@BindingAdapter(value = ["setUserStarted"])
+fun ImageView.isUserStarted(isUserStared: Boolean?) {
+    when(isUserStared) {
+        true -> setImageResource(R.drawable.ic_star_filled_yellow_36px)
+        false -> setImageResource(R.drawable.ic_star_unfilled_36px)
+    }
 }

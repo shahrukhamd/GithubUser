@@ -8,9 +8,9 @@ import io.mockk.unmockkAll
 import org.junit.After
 import org.junit.Before
 
-class MainRepositoryTest {
+class SearchRepositoryTest {
 
-    private lateinit var mainRepository: MainRepository
+    private lateinit var searchRepository: SearchRepository
 
     @MockK
     private lateinit var githubService: GithubService
@@ -21,7 +21,7 @@ class MainRepositoryTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxed = true)
-        mainRepository = MainRepository(githubService)
+        searchRepository = SearchRepository(githubService)
     }
 
     @After

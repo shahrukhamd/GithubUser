@@ -16,11 +16,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.shahrukhamd.githubuser.R
 import com.shahrukhamd.githubuser.databinding.FragmentUserDetailsBinding
 import com.shahrukhamd.githubuser.utils.EventObserver
+import com.shahrukhamd.githubuser.utils.showToast
 
-class UserDetailFragment: Fragment(R.layout.fragment_user_details) {
+class UserDetailFragment: Fragment() {
 
     private val viewModel: SearchViewModel by activityViewModels()
 
@@ -31,9 +31,11 @@ class UserDetailFragment: Fragment(R.layout.fragment_user_details) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewBinding = FragmentUserDetailsBinding.inflate(inflater, container, false)
-        viewBinding.lifecycleOwner = viewLifecycleOwner
-        viewBinding.viewModel = viewModel
+        viewBinding = FragmentUserDetailsBinding.inflate(inflater, container, false).apply {
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = this@UserDetailFragment.viewModel
+        }
+
         return viewBinding.root
     }
 
@@ -41,7 +43,7 @@ class UserDetailFragment: Fragment(R.layout.fragment_user_details) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         initObserver()
-        viewModel.getCurrentUserDetails()
+        viewModel.getDetailScreenUserDetails()
     }
 
     private fun initViews() {
@@ -67,7 +69,11 @@ class UserDetailFragment: Fragment(R.layout.fragment_user_details) {
 
     private fun initObserver() {
         viewModel.onCloseProfileDetails.observe(viewLifecycleOwner, EventObserver {
-            findNavController().popBackStack()
+            findNavController().navigateUp()
+        })
+
+        viewModel.showToast.observe(viewLifecycleOwner, EventObserver {
+            context?.showToast(it)
         })
     }
 }

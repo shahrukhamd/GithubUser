@@ -13,7 +13,7 @@
     <fragment
         android:id="@+id/userListFragment"
         android:name="com.shahrukhamd.githubuser.ui.search.UserListFragment"
-        android:label="UserListFragment" >
+        android:label="UserListFragment">
 
         <action
             android:id="@+id/action_userListFragment_to_userDetailFragment"
@@ -28,9 +28,6 @@
     <fragment
         android:id="@+id/userDetailFragment"
         android:name="com.shahrukhamd.githubuser.ui.search.UserDetailFragment"
-        android:label="UserDetailFragment" >
-        <argument
-            android:name="userItem"
-            app:argType="com.shahrukhamd.githubuser.data.model.GithubUser" />
-    </fragment>
+        android:label="UserDetailFragment"/>
+
 </navigation>

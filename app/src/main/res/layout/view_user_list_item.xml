@@ -4,6 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <variable
+            name="position"
+            type="Integer" />
+
+        <variable
+            name="viewModel"
+            type="com.shahrukhamd.githubuser.ui.search.SearchViewModel" />
+
         <variable
             name="userModel"
             type="com.shahrukhamd.githubuser.data.model.GithubUser" />
@@ -11,7 +20,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> viewModel.onUserListItemClicked(userModel, position)}">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/user_item_image"
@@ -40,17 +50,29 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:ellipsize="end"
+            android:fontFamily="sans-serif-light"
             android:maxLines="2"
             android:text="@{userModel.login}"
             android:textSize="22sp"
-            android:fontFamily="sans-serif-light"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageView"
             app:layout_constraintHorizontal_bias="0.488"
             app:layout_constraintStart_toEndOf="@+id/user_item_image"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@tools:sample/full_names" />
 
+        <ImageView
+            android:id="@+id/imageView"
+            setUserStarted="@{userModel.userStared}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/space_medium"
+            android:padding="@dimen/space_medium"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_star_filled_yellow_36px"
+            android:onClick="@{() -> viewModel.onUserStarClick(position, userModel)}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
