@@ -50,6 +50,9 @@ class MainViewModel @Inject constructor(private var mainRepository: MainReposito
     private val _onUserProfileOpen = MutableLiveData<Event<String>>()
     val onUserProfileOpen: LiveData<Event<String>> = _onUserProfileOpen
 
+    private val _onCloseProfileDetails = MutableLiveData<Event<Boolean>>()
+    val onCloseProfileDetails: LiveData<Event<Boolean>> = _onCloseProfileDetails
+
     init {
         // todo remove this logic and implement view for when there's no query
         onSearchQueryChanged("john") // initial search query to fill the list
@@ -103,5 +106,9 @@ class MainViewModel @Inject constructor(private var mainRepository: MainReposito
         _userDetailUpdated.value?.htmlUrl?.let {
             _onUserProfileOpen.value = Event(it)
         }
+    }
+
+    fun onProfileCloseClick() {
+        _onCloseProfileDetails.value = Event(true)
     }
 }

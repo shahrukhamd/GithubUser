@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.shahrukhamd.githubuser.R
 import com.shahrukhamd.githubuser.databinding.FragmentUserDetailsBinding
 import com.shahrukhamd.githubuser.utils.EventObserver
@@ -39,6 +40,7 @@ class UserDetailFragment: Fragment(R.layout.fragment_user_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
+        initObserver()
         viewModel.getCurrentUserDetails()
     }
 
@@ -60,6 +62,12 @@ class UserDetailFragment: Fragment(R.layout.fragment_user_details) {
                 data = Uri.parse(it)
             }
             startActivity(openIntent)
+        })
+    }
+
+    private fun initObserver() {
+        viewModel.onCloseProfileDetails.observe(viewLifecycleOwner, EventObserver {
+            findNavController().popBackStack()
         })
     }
 }
