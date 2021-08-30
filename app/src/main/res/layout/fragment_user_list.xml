@@ -36,7 +36,7 @@
                     android:iconifiedByDefault="false"
                     android:queryBackground="@android:color/transparent"
                     android:queryHint="@string/search_view_hint"
-                    android:searchIcon="@mipmap/ic_launcher_round" />
+                    android:searchIcon="@drawable/ic_user_default" />
 
             </com.google.android.material.card.MaterialCardView>
         </com.google.android.material.appbar.AppBarLayout>

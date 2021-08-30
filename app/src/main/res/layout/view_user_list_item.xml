@@ -27,10 +27,10 @@
             <ImageView
                 circleCropEnabled="@{false}"
                 loadImage="@{userModel.avatarUrl}"
-                placeholder="@{@drawable/ic_user_default_200px}"
+                placeholder="@{@drawable/ic_user_default}"
                 android:layout_width="@dimen/main_list_user_icon_size"
                 android:layout_height="@dimen/main_list_user_icon_size"
-                android:src="@drawable/ic_user_default_200px" />
+                android:src="@drawable/ic_user_default" />
 
         </com.google.android.material.card.MaterialCardView>
 
