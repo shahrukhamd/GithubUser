@@ -10,6 +10,9 @@ object Version {
     const val appCompatVersion = "1.3.1"
     const val fragmentVersion = "1.3.6"
 
+    // database
+    const val roomVersion = "2.3.0"
+
     // ui
     const val recyclerViewVersion = "1.2.1"
     const val materialVersion = "1.4.0"
@@ -67,6 +70,12 @@ object Base {
     const val activity = "androidx.activity:activity-ktx:${Version.activity}"
     const val fragment = "androidx.fragment:fragment-ktx:${Version.fragmentVersion}"
     const val lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:${Version.lifecycleVersion}"
+}
+
+object Database {
+    const val roomRuntime = "androidx.room:room-runtime:${Version.roomVersion}"
+    const val roomCompiler = "androidx.room:room-compiler:${Version.roomVersion}"
+    const val roomKtx = "androidx.room:room-ktx:${Version.roomVersion}"
 }
 
 object Ui {

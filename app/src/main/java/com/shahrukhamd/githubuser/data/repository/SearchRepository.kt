@@ -11,6 +11,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.shahrukhamd.githubuser.data.api.GithubService
+import com.shahrukhamd.githubuser.data.base.AppDatabase
 import com.shahrukhamd.githubuser.data.model.GithubUser
 import com.shahrukhamd.githubuser.data.source.GithubPagingSource
 import kotlinx.coroutines.flow.Flow
@@ -18,17 +19,27 @@ import javax.inject.Inject
 
 private const val NETWORK_PAGE_SIZE = 30
 
-class MainRepository @Inject constructor(private val service: GithubService) {
+class SearchRepository @Inject constructor(
+    private val service: GithubService,
+    private val database: AppDatabase
+) {
 
     fun getPaginatedUser(query: String): Flow<PagingData<GithubUser>> {
         return Pager(
             config = PagingConfig(NETWORK_PAGE_SIZE, enablePlaceholders = false),
-            pagingSourceFactory = { GithubPagingSource(service, query) }
+            pagingSourceFactory = { GithubPagingSource(database, service, query) }
         ).flow
     }
 
-    suspend fun getUserDetails(username: String): GithubUser? {
-        // todo refactor this for more error handling
-        return service.getUserDetails(username).body()
+    suspend fun getUserDetailsAndUpdateDb(username: String): GithubUser? {
+        return service.getUserDetails(username).body()?.apply {
+            val localUser = database.userItemDao().getUser(id)
+            isUserStared = localUser?.isUserStared == true
+            database.userItemDao().updateUser(this)
+        }
+    }
+
+    suspend fun updateUser(user: GithubUser) {
+        database.userItemDao().updateUser(user)
     }
 }

@@ -4,7 +4,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import com.google.common.truth.Truth.assertThat
-import com.shahrukhamd.githubuser.data.repository.MainRepository
+import com.shahrukhamd.githubuser.data.repository.SearchRepository
+import com.shahrukhamd.githubuser.ui.search.SearchViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -15,7 +16,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class MainViewModelTest {
+class SearchViewModelTest {
 
     // Run tasks synchronously
     @Rule
@@ -26,14 +27,14 @@ class MainViewModelTest {
     private lateinit var combinedLoadStates: CombinedLoadStates
 
     @MockK
-    private lateinit var mainRepository: MainRepository
+    private lateinit var searchRepository: SearchRepository
 
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: SearchViewModel
 
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxed = true)
-        viewModel = MainViewModel(mainRepository)
+        viewModel = SearchViewModel(searchRepository)
     }
 
     @After
@@ -83,6 +84,6 @@ class MainViewModelTest {
     fun `when called search query changes, repository api should be called with same query`() {
         viewModel.onSearchQueryChanged("some query")
 
-        verify { mainRepository.getPaginatedUser("some query") }
+        verify { searchRepository.getPaginatedUser("some query") }
     }
 }

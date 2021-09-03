@@ -5,7 +5,7 @@
  * terms of the MIT license - https://opensource.org/licenses/MIT
  */
 
-package com.shahrukhamd.githubuser.ui.main
+package com.shahrukhamd.githubuser.ui.search
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,14 +14,19 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.paging.ExperimentalPagingApi
 import com.shahrukhamd.githubuser.databinding.FragmentUserListBinding
 import com.shahrukhamd.githubuser.ui.common.ListItemLoadStateAdapter
+import com.shahrukhamd.githubuser.utils.DebouncingQueryTextListener
+import com.shahrukhamd.githubuser.utils.EventObserver
 import com.shahrukhamd.githubuser.utils.showToast
 import kotlinx.coroutines.launch
 
-class UserListFragment: Fragment() {
+@ExperimentalPagingApi
+class UserListFragment : Fragment() {
 
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: SearchViewModel by activityViewModels()
 
     private lateinit var viewBinding: FragmentUserListBinding
 
@@ -32,22 +37,21 @@ class UserListFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewBinding = FragmentUserListBinding.inflate(inflater, container, false)
-        viewBinding.lifecycleOwner = viewLifecycleOwner
-        viewBinding.viewModel = viewModel
-
+        viewBinding = FragmentUserListBinding.inflate(inflater, container, false).apply {
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = this@UserListFragment.viewModel
+        }
         return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
+        initObserver()
     }
 
     private fun initViews() {
-        userListAdapter = UserListRecyclerViewAdapter { user ->
-            user?.let { viewModel.onUserListItemClicked(it) }
-        }
+        userListAdapter = UserListRecyclerViewAdapter(viewModel)
 
         viewBinding.rvUserList.adapter =
             userListAdapter?.withLoadStateFooter(ListItemLoadStateAdapter { userListAdapter?.retry() })
@@ -57,13 +61,35 @@ class UserListFragment: Fragment() {
         viewBinding.btnRetry.setOnClickListener { userListAdapter?.refresh() }
         viewBinding.swipeRefresh.setOnRefreshListener { userListAdapter?.refresh() }
 
+        viewBinding.svUserSearch.setOnQueryTextListener(
+            DebouncingQueryTextListener(lifecycle) {
+                if (it.isNotEmpty()) {
+                    viewModel.onSearchQueryChanged(it.trim())
+                }
+            }
+        )
+    }
+
+    private fun initObserver() {
         viewModel.searchResponse.observe(viewLifecycleOwner, {
             viewBinding.swipeRefresh.isRefreshing = false
             lifecycleScope.launch { userListAdapter?.submitData(it) }
         })
 
-        viewModel.showToast.observe(viewLifecycleOwner, {
+        viewModel.onUserDetailUpdate.observe(viewLifecycleOwner, {
+            lifecycleScope.launch {
+                userListAdapter?.notifyItemChanged(it.first, it.second)
+            }
+        })
+
+        viewModel.showToast.observe(viewLifecycleOwner, EventObserver {
             context?.showToast(it)
+        })
+
+        viewModel.showUserDetails.observe(viewLifecycleOwner, EventObserver {
+            findNavController().navigate(
+                UserListFragmentDirections.actionUserListFragmentToUserDetailFragment()
+            )
         })
     }
 }

@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="main_list_user_icon_width_height">50dp</dimen>
+    <dimen name="main_list_user_icon_size">64dp</dimen>
+    <dimen name="card_radius">8dp</dimen>
+    <dimen name="card_elevation">4dp</dimen>
+
+    <!-- margins / padding-->
+    <dimen name="space_xsmall">2dp</dimen>
+    <dimen name="space_small">4dp</dimen>
+    <dimen name="space_medium">8dp</dimen>
+    <dimen name="space_large">12dp</dimen>
+    <dimen name="space_xlarge">16dp</dimen>
 </resources>

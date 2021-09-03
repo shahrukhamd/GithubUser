@@ -8,6 +8,8 @@
 package com.shahrukhamd.githubuser.data.model
 
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 import kotlinx.parcelize.Parcelize
 
@@ -24,102 +26,146 @@ data class ApiUserSearchResponse(
 	var items: List<GithubUser>? = null
 ) : Parcelable
 
+@Entity(tableName = "github_user")
 @Parcelize
 data class GithubUser(
 
 	@Json(name="gists_url")
-	val gistsUrl: String? = null,
+	var gistsUrl: String? = null,
 
 	@Json(name="repos_url")
-	val reposUrl: String? = null,
+	var reposUrl: String? = null,
 
 	@Json(name="following_url")
-	val followingUrl: String? = null,
+	var followingUrl: String? = null,
 
 	@Json(name="twitter_username")
-	val twitterUsername: String? = null,
+	var twitterUsername: String? = null,
 
 	@Json(name="bio")
-	val bio: String? = null,
+	var bio: String? = null,
 
 	@Json(name="created_at")
-	val createdAt: String? = null,
+	var createdAt: String? = null,
 
 	@Json(name="login")
-	val login: String? = null,
+	var login: String? = null,
 
 	@Json(name="type")
-	val type: String? = null,
+	var type: String? = null,
 
 	@Json(name="blog")
-	val blog: String? = null,
+	var blog: String? = null,
 
 	@Json(name="subscriptions_url")
-	val subscriptionsUrl: String? = null,
+	var subscriptionsUrl: String? = null,
 
 	@Json(name="updated_at")
-	val updatedAt: String? = null,
+	var updatedAt: String? = null,
 
 	@Json(name="site_admin")
-	val siteAdmin: Boolean? = null,
+	var siteAdmin: Boolean? = null,
 
 	@Json(name="company")
-	val company: String? = null,
+	var company: String? = null,
 
+	@PrimaryKey
 	@Json(name="id")
-	val id: Int? = null,
+	var id: Int,
 
 	@Json(name="public_repos")
-	val publicRepos: Int? = null,
+	var publicRepos: Int? = null,
 
 	@Json(name="gravatar_id")
-	val gravatarId: String? = null,
+	var gravatarId: String? = null,
 
 	@Json(name="email")
-	val email: String? = null,
+	var email: String? = null,
 
 	@Json(name="organizations_url")
-	val organizationsUrl: String? = null,
+	var organizationsUrl: String? = null,
 
 	@Json(name="hireable")
-	val hireable: Boolean? = null,
+	var hireable: Boolean? = null,
 
 	@Json(name="starred_url")
-	val starredUrl: String? = null,
+	var starredUrl: String? = null,
 
 	@Json(name="followers_url")
-	val followersUrl: String? = null,
+	var followersUrl: String? = null,
 
 	@Json(name="public_gists")
-	val publicGists: Int? = null,
+	var publicGists: Int? = null,
 
 	@Json(name="url")
-	val url: String? = null,
+	var url: String? = null,
 
 	@Json(name="received_events_url")
-	val receivedEventsUrl: String? = null,
+	var receivedEventsUrl: String? = null,
 
 	@Json(name="followers")
-	val followers: Int? = null,
+	var followers: Int? = null,
 
 	@Json(name="avatar_url")
-	val avatarUrl: String? = null,
+	var avatarUrl: String? = null,
 
 	@Json(name="events_url")
-	val eventsUrl: String? = null,
+	var eventsUrl: String? = null,
 
 	@Json(name="html_url")
-	val htmlUrl: String? = null,
+	var htmlUrl: String? = null,
 
 	@Json(name="following")
-	val following: Int? = null,
+	var following: Int? = null,
 
 	@Json(name="name")
-	val name: String? = null,
+	var name: String? = null,
 
 	@Json(name="location")
-	val location: String? = null,
+	var location: String? = null,
 
 	@Json(name="node_id")
-	val nodeId: String? = null
-) : Parcelable
+	var nodeId: String? = null,
+
+	var isUserStared: Boolean = false
+
+) : Parcelable {
+	fun copy(new: GithubUser?): GithubUser {
+		new?.let { newUser ->
+			id = newUser.id
+			gistsUrl = newUser.gistsUrl
+			reposUrl = newUser.reposUrl
+			followingUrl = newUser.followingUrl
+			twitterUsername = newUser.twitterUsername
+			bio = newUser.bio
+			createdAt = newUser.createdAt
+			login = newUser.login
+			type = newUser.type
+			blog = newUser.blog
+			subscriptionsUrl = newUser.subscriptionsUrl
+			updatedAt = newUser.updatedAt
+			siteAdmin = newUser.siteAdmin
+			company = newUser.company
+			publicRepos = newUser.publicRepos
+			gravatarId = newUser.gravatarId
+			email = newUser.email
+			organizationsUrl = newUser.organizationsUrl
+			hireable = newUser.hireable
+			starredUrl = newUser.starredUrl
+			followersUrl = newUser.followersUrl
+			publicGists = newUser.publicGists
+			url = newUser.url
+			receivedEventsUrl = newUser.receivedEventsUrl
+			followers = newUser.followers
+			avatarUrl = newUser.avatarUrl
+			eventsUrl = newUser.eventsUrl
+			htmlUrl = newUser.htmlUrl
+			following = newUser.following
+			name = newUser.name
+			location = newUser.location
+			nodeId = newUser.nodeId
+//			isUserStared = newUser.isUserStared	// remote user object shouldn't update local star value
+		}
+		return this
+	}
+}

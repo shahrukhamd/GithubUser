@@ -64,6 +64,10 @@ dependencies {
     implementation Base.activity
     implementation Base.fragment
 
+    implementation Database.roomRuntime
+    kapt Database.roomCompiler
+    implementation Database.roomKtx
+
     implementation Ui.glide
     implementation Ui.material
     implementation Ui.recyclerView

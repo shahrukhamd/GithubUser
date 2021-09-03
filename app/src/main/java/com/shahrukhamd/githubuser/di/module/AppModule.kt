@@ -7,8 +7,10 @@
 
 package com.shahrukhamd.githubuser.di.module
 
+import android.app.Application
 import com.shahrukhamd.githubuser.BuildConfig
 import com.shahrukhamd.githubuser.data.api.GithubService
+import com.shahrukhamd.githubuser.data.base.AppDatabase
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -63,4 +65,8 @@ class AppModule {
     @Provides
     @Singleton
     fun provideApiService(retrofit: Retrofit): GithubService = retrofit.create(GithubService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideDatabase(app: Application) = AppDatabase.getInstance(app)
 }

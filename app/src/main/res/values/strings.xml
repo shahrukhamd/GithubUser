@@ -2,5 +2,7 @@
     <string name="app_name">Github User</string>
     <string name="retry">Retry</string>
     <string name="search">Search</string>
-    <string name="open_profile">Open Profile</string>
+    <string name="open_profile">Open</string>
+    <string name="share_profile">Share</string>
+    <string name="search_view_hint">Search GitHub user</string>
 </resources>
