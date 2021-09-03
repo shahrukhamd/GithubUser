@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2021 Shahrukh Ahmed Siddiqui
+  ~
+  ~ You may use, distribute and modify this code under the
+  ~ terms of the MIT license - https://opensource.org/licenses/MIT
+  -->
+
 <resources>
     <color name="color_primary">#6e5494</color>
     <color name="color_primary_dark">#4E3277</color>
