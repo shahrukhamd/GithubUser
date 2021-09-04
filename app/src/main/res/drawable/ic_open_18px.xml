@@ -1,3 +1,10 @@
+<!--
+  ~ Copyright (c) 2021 Shahrukh Ahmed Siddiqui
+  ~
+  ~ You may use, distribute and modify this code under the
+  ~ terms of the MIT license - https://opensource.org/licenses/MIT
+  -->
+
 <vector android:height="18dp" android:viewportHeight="512.0058"
     android:viewportWidth="512" android:width="18dp" xmlns:android="http://schemas.android.com/apk/res/android">
     <path android:fillColor="?attr/colorControlNormal" android:pathData="m507.523,148.891 l-138.668,-144c-4.523,-4.691 -11.457,-6.164 -17.492,-3.734 -6.059,2.453 -10.027,8.32 -10.027,14.848v69.336h-5.332c-114.688,0 -208,93.313 -208,208v32c0,7.422 5.227,13.609 12.457,15.297 1.176,0.297 2.348,0.426 3.52,0.426 6.039,0 11.82,-3.543 14.613,-9.109 29.996,-60.012 90.305,-97.281 157.398,-97.281h25.344v69.332c0,6.531 3.969,12.398 10.027,14.828 5.996,2.453 12.969,0.961 17.492,-3.734l138.668,-144c5.973,-6.207 5.973,-15.977 0,-22.207zM507.523,148.891"/>
