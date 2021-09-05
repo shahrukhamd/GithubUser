@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2021 Shahrukh Ahmed Siddiqui
+  ~
+  ~ You may use, distribute and modify this code under the
+  ~ terms of the MIT license - https://opensource.org/licenses/MIT
+  -->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.shahrukhamd.githubuser.ui.search.SearchViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/space_xlarge">
+
+        <ImageView
+            android:id="@+id/imv_user_detail_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:onClick="@{() -> viewModel.onProfileCloseClick()}"
+            android:padding="@dimen/space_small"
+            android:src="@drawable/ic_close_24px"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cv_user_details_image"
+            app:layout_constraintTop_toTopOf="@+id/cv_user_details_image">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/imv_user_detail_star"
+                    setUserStarted="@{viewModel.onUserDetailUpdate.second.userStared}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> viewModel.onUserStarClick(viewModel.onUserDetailUpdate.first, viewModel.onUserDetailUpdate.second)}"
+                    android:padding="@dimen/space_small"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_user_detail_name"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_user_detail_name"
+                    tools:src="@drawable/ic_star_filled_yellow_36px" />
+
+                <TextView
+                    android:id="@+id/tv_user_detail_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_xlarge"
+                    android:fontFamily="sans-serif-black"
+                    android:text="@{viewModel.onUserDetailUpdate.second.name}"
+                    android:textSize="28sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="@tools:sample/full_names" />
+
+                <TextView
+                    android:id="@+id/tv_user_detail_bio"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_medium"
+                    android:text="@{viewModel.onUserDetailUpdate.second.bio}"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/tv_user_detail_name"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_user_detail_name"
+                    tools:maxLines="6"
+                    tools:text="@tools:sample/lorem/random" />
+
+                <TextView
+                    android:id="@+id/tv_user_detail_email"
+                    style="@style/TvUserDetailsMetadata"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.onUserDetailUpdate.second.email}"
+                    app:drawableStartCompat="@drawable/ic_email_18px"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/tv_user_detail_bio"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_user_detail_bio"
+                    tools:text="shahrukhamd@gmail.com" />
+
+                <TextView
+                    android:id="@+id/tv_user_detail_location"
+                    style="@style/TvUserDetailsMetadata"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.onUserDetailUpdate.second.location}"
+                    app:drawableStartCompat="@drawable/ic_location_18px"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/tv_user_detail_bio"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_user_detail_email"
+                    tools:text="Located in Hong Kong" />
+
+                <TextView
+                    android:id="@+id/tv_user_detail_twitter"
+                    style="@style/TvUserDetailsMetadata"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.onUserDetailUpdate.second.twitterUsername}"
+                    app:drawableStartCompat="@drawable/ic_twitter_18px"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/tv_user_detail_bio"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_user_detail_location"
+                    tools:text="shahrukhamd" />
+
+                <TextView
+                    android:id="@+id/tv_user_detail_blog"
+                    style="@style/TvUserDetailsMetadata"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.onUserDetailUpdate.second.blog}"
+                    app:drawableStartCompat="@drawable/ic_web_18px"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/tv_user_detail_bio"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_user_detail_twitter"
+                    tools:text="shahrukhamd.com" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_user_detail_profile_open"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_xlarge"
+                    android:layout_marginEnd="@dimen/space_small"
+                    android:layout_weight="1"
+                    android:onClick="@{() -> viewModel.onUserProfileOpenClick()}"
+                    android:padding="@dimen/space_large"
+                    android:text="@string/open_profile"
+                    app:icon="@drawable/ic_open_18px"
+                    app:iconGravity="textStart"
+                    app:iconPadding="@dimen/space_xlarge"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_user_detail_profile_share"
+                    app:layout_constraintStart_toStartOf="@+id/tv_user_detail_bio"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_user_detail_blog" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_user_detail_profile_share"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_small"
+                    android:layout_marginTop="@dimen/space_xlarge"
+                    android:layout_weight="1"
+                    android:onClick="@{() -> viewModel.onUserProfileShareClick()}"
+                    android:padding="@dimen/space_large"
+                    android:text="@string/share_profile"
+                    app:icon="@drawable/ic_share_18px"
+                    app:iconGravity="textStart"
+                    app:iconPadding="@dimen/space_xlarge"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/btn_user_detail_profile_open"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_user_detail_blog" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_user_details_image"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/space_xlarge"
+            app:cardCornerRadius="@dimen/card_radius"
+            app:cardElevation="@dimen/card_elevation"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imv_user_detail_close">
+
+            <ImageView
+                loadImage="@{viewModel.onUserDetailUpdate.second.avatarUrl}"
+                placeholder="@{@drawable/ic_user_default}"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_user_default" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
