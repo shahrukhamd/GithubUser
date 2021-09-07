@@ -29,10 +29,12 @@ It fetches data from **Github** [search](https://docs.github.com/en/rest/referen
 - [Moshi](https://github.com/square/moshi) - To convert Java objects to JSON and back (used with Retrofit)
 
 ### Testing
+- [Espresso](https://developer.android.com/training/testing/espresso) - Easy, concise and powerful UI testing 
+- [StriKt](https://strikt.io/) - Strikingly easy assertion library built with Kotlin
 - [MockK](https://mockk.io/ANDROID.html) - Mocking library for Kotlin
 - [Truth](https://truth.dev/) - Fluent assertions for Java and Android
   
-### Others
+### Tools
 - [Glide](https://bumptech.github.io/glide/) -  Fast and efficient image loading
 - [Timber](https://github.com/JakeWharton/timber) - Logger with a small, extensible API providing utility on top of Android's normal Log class
 
@@ -70,8 +72,7 @@ Interested in seeing a particular feature? Please [open a new issue](https://git
 
 ## Support
 
-This project is authored and maintained by [shahrukhamd](https://shahrukhamd.com/)
-
+This project is authored and maintained by [shahrukhamd](https://shahrukhamd.com/). 
 You can show your support by buying me a coffee :)
 
 <a href="https://www.buymeacoffee.com/shahrukhamd"><img alt="buy me coffee" src="/art/buymecoffee.png"/></a>

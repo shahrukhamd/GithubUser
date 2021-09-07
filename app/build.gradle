@@ -48,7 +48,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = '1.8'
     }
 
     buildFeatures {
@@ -57,8 +57,10 @@ android {
     }
 
     testOptions {
-        unitTests.returnDefaultValues = true // http://g.co/androidstudio/not-mocked
-        unitTests.includeAndroidResources = true
+        unitTests {
+            includeAndroidResources = true
+            returnDefaultValues = true // http://g.co/androidstudio/not-mocked
+        }
     }
 }
 

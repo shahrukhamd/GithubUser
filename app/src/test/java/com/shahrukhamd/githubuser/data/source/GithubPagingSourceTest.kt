@@ -9,6 +9,7 @@ package com.shahrukhamd.githubuser.data.source
 
 import androidx.paging.PagingSource
 import com.shahrukhamd.githubuser.data.api.GithubService
+import com.shahrukhamd.githubuser.data.base.AppDatabase
 import com.shahrukhamd.githubuser.data.model.ApiUserSearchResponse
 import com.shahrukhamd.githubuser.data.model.GithubUser
 import io.mockk.MockKAnnotations
@@ -37,6 +38,9 @@ class GithubPagingSourceTest {
     @MockK
     private lateinit var githubService: GithubService
 
+    @MockK
+    private lateinit var database: AppDatabase
+
     private lateinit var githubPagingSource: GithubPagingSource
 
     private val userList = listOf(
@@ -46,7 +50,7 @@ class GithubPagingSourceTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxed = true)
-        githubPagingSource = GithubPagingSource(githubService, "test")
+        githubPagingSource = GithubPagingSource(database, githubService, "test")
 
     }
 

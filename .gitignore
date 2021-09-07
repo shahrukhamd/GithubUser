@@ -42,6 +42,8 @@ captures/
 .idea/gradle.xml
 .idea/dictionaries
 .idea/libraries
+.idea/kotlinScripting.xml
+.idea/codeStyles/*
 .DS_Store
 /.idea/caches
 /.idea/libraries

@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2021 Shahrukh Ahmed Siddiqui
+ *
+ * You may use, distribute and modify this code under the
+ * terms of the MIT license - https://opensource.org/licenses/MIT
+ */
+
 object Version {
     // base
     const val kotlinVersion = "1.5.21"
@@ -44,10 +51,16 @@ object Version {
 
     // testing
     const val mockkVersion = "1.12.0"
-    const val truthVersion = "1.1.3"
+    const val mockitoVersion = "3.12.4"
+    const val truthVersion = "1.4.0"
     const val archTestVersion = "2.1.0"
     const val coroutineTestVersion = "1.4.3"
-    const val androidRunnerVersion = "1.0.1"
+    const val fragmentTestingVersion = "1.3.6"
+    const val androidTestCoreVersion = "1.4.0"
+    const val espressoCoreVersion = "3.4.0"
+    const val androidRunnerVersion = "1.4.0"
+    const val androidJunitVersion = "1.1.3"
+    const val striKtVersion = "0.31.0"
 }
 
 object Base {
@@ -97,6 +110,9 @@ object Networking {
 object Di {
     const val hiltAndroid = "com.google.dagger:hilt-android:${Version.hiltVersion}"
     const val hiltCompiler = "com.google.dagger:hilt-compiler:${Version.hiltVersion}"
+
+    const val hiltAndroidTest = "com.google.dagger:hilt-android-testing:${Version.hiltVersion}"
+    const val hiltCompilerTest = "com.google.dagger:hilt-android-compiler:${Version.hiltVersion}"
 }
 
 object Coroutine {
@@ -118,10 +134,19 @@ object Navigation {
 }
 
 object Testing {
-    const val runner = "com.android.support.test:runner:${Version.androidRunnerVersion}"
+    const val junit5 = "org.junit.jupiter:junit-jupiter"
+    const val androidTestCore = "androidx.test:core-ktx:${Version.androidTestCoreVersion}"
+    const val espressoCore = "androidx.test.espresso:espresso-core:${Version.espressoCoreVersion}"
+    const val androidJunit = "androidx.test.ext:junit-ktx:${Version.androidJunitVersion}"
+    const val truth = "androidx.test.ext:truth:${Version.truthVersion}"
+    const val runner = "androidx.test.runner:${Version.androidRunnerVersion}"
     const val mockK = "io.mockk:mockk:${Version.mockkVersion}"
-    const val truth = "com.google.truth:truth:${Version.truthVersion}"
+    const val mockito = "org.mockito:mockito-core:${Version.mockitoVersion}"
+    const val mockitoAndroid = "org.mockito:mockito-android:${Version.mockitoVersion}"
+    const val mockKAndroid = "io.mockk:mockk-android:${Version.mockkVersion}"
     const val archCore = "androidx.arch.core:core-testing:${Version.archTestVersion}"
     const val coroutine = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Version.coroutineTestVersion}"
     const val kotlinJunit = "org.jetbrains.kotlin:kotlin-test-junit:${Version.kotlinVersion}"
+    const val fragmentTesting = "androidx.fragment:fragment-testing:${Version.fragmentTestingVersion}"
+    const val striKt = "io.strikt:strikt-core:${Version.striKtVersion}"
 }
