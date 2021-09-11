@@ -55,8 +55,8 @@ class SearchViewModelTest {
 
         viewModel.onUserListLoadStateChange(combinedLoadStates)
 
-        assertThat(viewModel.showRefreshingView.value).isTrue()
-        assertThat(viewModel.showRetryButton.value).isFalse()
+        assertThat(viewModel.showRefreshingView.value?.getDataIfNotConsumed()).isTrue()
+        assertThat(viewModel.showRetryButton.value?.getDataIfNotConsumed()).isFalse()
     }
 
     @Test
@@ -65,8 +65,8 @@ class SearchViewModelTest {
 
         viewModel.onUserListLoadStateChange(combinedLoadStates)
 
-        assertThat(viewModel.showRefreshingView.value).isFalse()
-        assertThat(viewModel.showRetryButton.value).isTrue()
+        assertThat(viewModel.showRefreshingView.value?.getDataIfNotConsumed()).isFalse()
+        assertThat(viewModel.showRetryButton.value?.getDataIfNotConsumed()).isTrue()
     }
 
     @Test
@@ -75,7 +75,7 @@ class SearchViewModelTest {
 
         viewModel.onUserListLoadStateChange(combinedLoadStates)
 
-        assertThat(viewModel.showToast.value).isNull()
+        assertThat(viewModel.showToast.value?.getDataIfNotConsumed()).isNull()
     }
 
     @Test
@@ -84,7 +84,7 @@ class SearchViewModelTest {
 
         viewModel.onUserListLoadStateChange(combinedLoadStates)
 
-        assertThat(viewModel.showToast.value).matches("some message")
+        assertThat(viewModel.showToast.value?.getDataIfNotConsumed()).matches("some message")
     }
 
     @Test

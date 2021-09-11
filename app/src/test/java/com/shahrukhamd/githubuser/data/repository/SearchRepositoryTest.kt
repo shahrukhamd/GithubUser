@@ -8,6 +8,7 @@
 package com.shahrukhamd.githubuser.data.repository
 
 import com.shahrukhamd.githubuser.data.api.GithubService
+import com.shahrukhamd.githubuser.data.base.AppDatabase
 import com.shahrukhamd.githubuser.data.source.GithubPagingSource
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
@@ -21,6 +22,9 @@ class SearchRepositoryTest {
 
     @MockK
     private lateinit var githubService: GithubService
+
+    @MockK
+    private lateinit var database: AppDatabase
     
     @MockK
     private lateinit var pagingSourceFactory: GithubPagingSource
@@ -28,7 +32,7 @@ class SearchRepositoryTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxed = true)
-        searchRepository = SearchRepository(githubService)
+        searchRepository = SearchRepository(githubService, database)
     }
 
     @After

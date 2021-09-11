@@ -5,7 +5,7 @@
  * terms of the MIT license - https://opensource.org/licenses/MIT
  */
 
-package com.shahrukhamd.githubuser.utils
+package com.shahrukhamd.utils
 
 /**
  * A wrapper for data that is exposed via a LiveData and represents an event.

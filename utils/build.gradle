@@ -1,0 +1,55 @@
+/*
+ * Copyright (c) 2021 Shahrukh Ahmed Siddiqui
+ *
+ * You may use, distribute and modify this code under the
+ * terms of the MIT license - https://opensource.org/licenses/MIT
+ */
+
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+}
+
+android {
+    compileSdkVersion Base.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion Base.minSdkVersion
+        targetSdkVersion Base.targetSdkVersion
+        versionCode Base.versionCode
+        versionName Base.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+
+    implementation Base.appCompat
+    implementation Base.lifecycle
+
+    implementation Ui.material
+    implementation Ui.recyclerView
+
+    implementation Tools.timber
+
+    implementation Coroutine.core
+    implementation Coroutine.android
+}

@@ -5,7 +5,7 @@
  * terms of the MIT license - https://opensource.org/licenses/MIT
  */
 
-package com.shahrukhamd.githubuser.ui.search
+package com.shahrukhamd.githubuser.ui.search.view
 
 import android.content.Intent
 import android.net.Uri
@@ -17,8 +17,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.shahrukhamd.githubuser.databinding.FragmentUserDetailsBinding
-import com.shahrukhamd.githubuser.utils.EventObserver
-import com.shahrukhamd.githubuser.utils.showToast
+import com.shahrukhamd.githubuser.ui.search.SearchViewModel
+import com.shahrukhamd.utils.EventObserver
+import com.shahrukhamd.utils.showToast
 
 class UserDetailFragment: Fragment() {
 
