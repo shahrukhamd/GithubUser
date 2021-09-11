@@ -5,7 +5,7 @@
  * terms of the MIT license - https://opensource.org/licenses/MIT
  */
 
-package com.shahrukhamd.githubuser.ui.search
+package com.shahrukhamd.githubuser.ui.search.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,9 +18,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
 import com.shahrukhamd.githubuser.databinding.FragmentUserListBinding
 import com.shahrukhamd.githubuser.ui.common.ListItemLoadStateAdapter
-import com.shahrukhamd.githubuser.utils.DebouncingQueryTextListener
-import com.shahrukhamd.githubuser.utils.EventObserver
-import com.shahrukhamd.githubuser.utils.showToast
+import com.shahrukhamd.githubuser.ui.search.SearchViewModel
+import com.shahrukhamd.githubuser.ui.search.UserListRecyclerViewAdapter
+import com.shahrukhamd.utils.DebouncingQueryTextListener
+import com.shahrukhamd.utils.EventObserver
+import com.shahrukhamd.utils.showToast
 import kotlinx.coroutines.launch
 
 @ExperimentalPagingApi

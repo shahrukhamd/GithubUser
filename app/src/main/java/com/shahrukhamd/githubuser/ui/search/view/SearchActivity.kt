@@ -5,7 +5,7 @@
  * terms of the MIT license - https://opensource.org/licenses/MIT
  */
 
-package com.shahrukhamd.githubuser.ui.search
+package com.shahrukhamd.githubuser.ui.search.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

@@ -17,7 +17,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.shahrukhamd.githubuser.data.model.GithubUser
 import com.shahrukhamd.githubuser.data.repository.SearchRepository
-import com.shahrukhamd.githubuser.utils.Event
+import com.shahrukhamd.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

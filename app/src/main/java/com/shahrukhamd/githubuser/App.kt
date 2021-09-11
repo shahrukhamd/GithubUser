@@ -8,7 +8,7 @@
 package com.shahrukhamd.githubuser
 
 import android.app.Application
-import com.shahrukhamd.githubuser.utils.CrashReportingTree
+import com.shahrukhamd.utils.CrashReportingTree
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
