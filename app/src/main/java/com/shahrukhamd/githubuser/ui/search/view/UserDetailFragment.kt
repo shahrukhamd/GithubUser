@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.shahrukhamd.githubuser.databinding.FragmentUserDetailsBinding
 import com.shahrukhamd.githubuser.ui.search.SearchViewModel
 import com.shahrukhamd.utils.EventObserver
@@ -24,6 +25,8 @@ import com.shahrukhamd.utils.showToast
 class UserDetailFragment: Fragment() {
 
     private val viewModel: SearchViewModel by activityViewModels()
+
+    private val args: UserDetailFragmentArgs by navArgs()
 
     private lateinit var viewBinding: FragmentUserDetailsBinding
 
@@ -36,7 +39,6 @@ class UserDetailFragment: Fragment() {
             lifecycleOwner = viewLifecycleOwner
             viewModel = this@UserDetailFragment.viewModel
         }
-
         return viewBinding.root
     }
 
@@ -44,7 +46,7 @@ class UserDetailFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         initObserver()
-        viewModel.getDetailScreenUserDetails()
+        viewModel.getDetailScreenUserDetails(args.user)
     }
 
     private fun initViews() {

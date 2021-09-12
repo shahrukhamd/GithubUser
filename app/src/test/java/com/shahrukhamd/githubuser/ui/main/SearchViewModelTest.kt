@@ -25,7 +25,6 @@ import org.junit.Test
 
 class SearchViewModelTest {
 
-    // Run tasks synchronously
     @Rule
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()

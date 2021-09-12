@@ -11,6 +11,8 @@ import android.app.Application
 import com.shahrukhamd.githubuser.BuildConfig
 import com.shahrukhamd.githubuser.data.api.GithubService
 import com.shahrukhamd.githubuser.data.base.AppDatabase
+import com.shahrukhamd.githubuser.data.repository.SearchRepository
+import com.shahrukhamd.githubuser.data.repository.SearchRepositoryImpl
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -22,11 +24,20 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
+
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class QAppDatabase
+
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class QGithubService
 
     @Provides
     fun provideBaseUrl() = BuildConfig.BASE_URL
@@ -64,9 +75,26 @@ class AppModule {
 
     @Provides
     @Singleton
+    @QGithubService
     fun provideApiService(retrofit: Retrofit): GithubService = retrofit.create(GithubService::class.java)
 
     @Provides
     @Singleton
+    @QAppDatabase
     fun provideDatabase(app: Application) = AppDatabase.getInstance(app)
+}
+
+/**
+ * A separate module just for the [SearchRepository] so this can be used for injecting fake one in test(s)
+ */
+@Module
+@InstallIn(SingletonComponent::class)
+object SearchRepositoryModule {
+    @Provides
+    @Singleton
+    fun provideSearchRepository(
+        @AppModule.QGithubService service: GithubService,
+        @AppModule.QAppDatabase database: AppDatabase): SearchRepository {
+        return SearchRepositoryImpl(service, database)
+    }
 }

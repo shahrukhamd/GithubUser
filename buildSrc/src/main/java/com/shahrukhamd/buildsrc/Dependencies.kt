@@ -51,16 +51,14 @@ object Version {
 
     // testing
     const val mockkVersion = "1.12.0"
-    const val mockitoVersion = "3.12.4"
     const val truthVersion = "1.4.0"
     const val archTestVersion = "2.1.0"
     const val coroutineTestVersion = "1.4.3"
     const val fragmentTestingVersion = "1.3.6"
     const val androidTestCoreVersion = "1.4.0"
-    const val espressoCoreVersion = "3.4.0"
+    const val espressoVersion = "3.4.0"
     const val androidRunnerVersion = "1.4.0"
     const val androidJunitVersion = "1.1.3"
-    const val striKtVersion = "0.31.0"
 }
 
 object Base {
@@ -134,19 +132,16 @@ object Navigation {
 }
 
 object Testing {
-    const val junit5 = "org.junit.jupiter:junit-jupiter"
     const val androidTestCore = "androidx.test:core-ktx:${Version.androidTestCoreVersion}"
-    const val espressoCore = "androidx.test.espresso:espresso-core:${Version.espressoCoreVersion}"
+    const val espressoCore = "androidx.test.espresso:espresso-core:${Version.espressoVersion}"
+    const val espressoIntent = "androidx.test.espresso:espresso-intents:${Version.espressoVersion}"
     const val androidJunit = "androidx.test.ext:junit-ktx:${Version.androidJunitVersion}"
     const val truth = "androidx.test.ext:truth:${Version.truthVersion}"
     const val runner = "androidx.test.runner:${Version.androidRunnerVersion}"
     const val mockK = "io.mockk:mockk:${Version.mockkVersion}"
-    const val mockito = "org.mockito:mockito-core:${Version.mockitoVersion}"
-    const val mockitoAndroid = "org.mockito:mockito-android:${Version.mockitoVersion}"
     const val mockKAndroid = "io.mockk:mockk-android:${Version.mockkVersion}"
     const val archCore = "androidx.arch.core:core-testing:${Version.archTestVersion}"
     const val coroutine = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Version.coroutineTestVersion}"
     const val kotlinJunit = "org.jetbrains.kotlin:kotlin-test-junit:${Version.kotlinVersion}"
     const val fragmentTesting = "androidx.fragment:fragment-testing:${Version.fragmentTestingVersion}"
-    const val striKt = "io.strikt:strikt-core:${Version.striKtVersion}"
 }

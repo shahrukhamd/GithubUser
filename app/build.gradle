@@ -28,7 +28,7 @@ android {
         versionCode Base.versionCode
         versionName Base.versionName
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.shahrukhamd.githubuser.GithubUserTestRunner"
     }
 
     buildTypes {
@@ -61,6 +61,26 @@ android {
             includeAndroidResources = true
             returnDefaultValues = true // http://g.co/androidstudio/not-mocked
         }
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            force 'androidx.test:monitor:1.4.0' // https://stackoverflow.com/a/67472544/3625510
+        }
+    }
+
+    packagingOptions {
+        excludes += 'META-INF/DEPENDENCIES.txt'
+        excludes += 'META-INF/LICENSE.txt'
+        excludes += 'META-INF/NOTICE.txt'
+        excludes += 'META-INF/NOTICE'
+        excludes += 'META-INF/LICENSE'
+        excludes += 'META-INF/DEPENDENCIES'
+        excludes += 'META-INF/notice.txt'
+        excludes += 'META-INF/license.txt'
+        excludes += 'META-INF/dependencies.txt'
+        excludes += "/META-INF/AL2.0"
+        excludes += "/META-INF/LGPL2.1"
     }
 }
 
@@ -108,4 +128,16 @@ dependencies {
     testImplementation Testing.archCore
     testImplementation Testing.coroutine
     testImplementation Testing.kotlinJunit
+
+    kaptAndroidTest Di.hiltCompilerTest
+    androidTestImplementation Di.hiltAndroidTest
+    androidTestImplementation Testing.archCore
+    androidTestImplementation Testing.truth
+    androidTestImplementation Testing.androidTestCore
+    androidTestImplementation Testing.espressoCore
+    androidTestImplementation Testing.espressoIntent
+    androidTestImplementation Testing.coroutine
+    androidTestImplementation Testing.androidJunit
+
+    debugImplementation Testing.fragmentTesting
 }

@@ -79,11 +79,16 @@ class SearchViewModel @Inject constructor(private var searchRepository: SearchRe
         errorState?.let { _showToast.value = Event(it.error.localizedMessage) }
     }
 
-    fun getDetailScreenUserDetails() {
+    fun getDetailScreenUserDetails(testUser: GithubUser?) {
+        if (_onUserDetailUpdate.value == null && testUser != null) {
+            // only for testing purpose at the moment, this will help pass the user login name so this
+            // live data initialise with it and the UI testing can be done against the sample user data
+            _onUserDetailUpdate.value = Pair(0, testUser)
+        }
         _onUserDetailUpdate.value?.let {
             viewModelScope.launch {
                 searchRepository.getUserDetailsAndUpdateDb(it.second.login.orEmpty())?.let {
-                        userUpdate -> _onUserDetailUpdate.value = Pair(it.first, it.second.copy(userUpdate))
+                    userUpdate -> _onUserDetailUpdate.value = Pair(it.first, it.second.copy(userUpdate))
                 }
             }
         }
