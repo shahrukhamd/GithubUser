@@ -7,6 +7,7 @@
 
 package com.shahrukhamd.githubuser.data.model
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -24,6 +25,12 @@ interface GithubUserDao {
     @Query("SELECT * FROM github_user WHERE id = :id")
     suspend fun getUser(id: Int): GithubUser?
 
+    @Query("SELECT * FROM github_user WHERE login LIKE :username")
+    suspend fun getUser(username: String): GithubUser?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateUser(user: GithubUser)
+
+    @Query("SELECT * FROM github_user WHERE isUserStared = 1")
+    fun getPagingStarredUsers(): PagingSource<Int, GithubUser>
 }

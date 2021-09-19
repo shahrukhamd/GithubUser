@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2021 Shahrukh Ahmed Siddiqui
   ~
   ~ You may use, distribute and modify this code under the
@@ -71,6 +70,19 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible" />
+
+                <Button
+                    android:id="@+id/btn_show_starred_users"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> viewModel.onStarredUsersClick()}"
+                    android:text="@string/show_starred_users"
+                    android:visibility="gone"
+                    app:isVisible="@{viewModel.showStarredUserButton.dataIfNotConsumed}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_retry"
                     tools:visibility="visible" />
 
                 <androidx.recyclerview.widget.RecyclerView

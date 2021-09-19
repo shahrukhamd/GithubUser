@@ -7,6 +7,8 @@ import kotlinx.coroutines.flow.Flow
 interface SearchRepository {
     fun getPaginatedUser(query: String): Flow<PagingData<GithubUser>>
 
+    suspend fun getPagingStarredUsers(): Flow<PagingData<GithubUser>>
+
     suspend fun getUserDetailsAndUpdateDb(username: String): GithubUser?
 
     suspend fun updateUser(user: GithubUser)

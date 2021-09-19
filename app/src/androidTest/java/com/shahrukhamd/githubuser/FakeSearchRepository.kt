@@ -23,6 +23,12 @@ class FakeSearchRepository @Inject constructor(): SearchRepository {
     private var userDataForTest = SampleUserDetailsObj
 
     override fun getPaginatedUser(query: String): Flow<PagingData<GithubUser>> {
+        // todo not used in current tests
+        return emptyFlow()
+    }
+
+    override suspend fun getPagingStarredUsers(): Flow<PagingData<GithubUser>> {
+        // todo not used in current tests
         return emptyFlow()
     }
 

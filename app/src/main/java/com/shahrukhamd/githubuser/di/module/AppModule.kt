@@ -87,7 +87,7 @@ class AppModule {
         val authInterceptor = Interceptor { chain ->
             val request = chain.request()
             val builder = request.newBuilder()
-            val authToken = BuildConfig.PERSONAL_ACCESS_TOKEN
+            val authToken = ""
             if (authToken.isNotBlank()) {
                 // add auth token to your request header
                 // builder.addHeader()

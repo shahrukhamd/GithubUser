@@ -15,6 +15,8 @@ import com.shahrukhamd.githubuser.data.base.AppDatabase
 import com.shahrukhamd.githubuser.data.model.GithubUser
 import com.shahrukhamd.githubuser.data.source.GithubPagingSource
 import kotlinx.coroutines.flow.Flow
+import timber.log.Timber
+import java.io.IOException
 import javax.inject.Inject
 
 private const val NETWORK_PAGE_SIZE = 30
@@ -31,11 +33,24 @@ class SearchRepositoryImpl @Inject constructor(
         ).flow
     }
 
+    override suspend fun getPagingStarredUsers(): Flow<PagingData<GithubUser>> {
+        return Pager(
+            config = PagingConfig(NETWORK_PAGE_SIZE, enablePlaceholders = false),
+            pagingSourceFactory =  { database.userItemDao().getPagingStarredUsers() }
+        ).flow
+    }
+
     override suspend fun getUserDetailsAndUpdateDb(username: String): GithubUser? {
-        return service.getUserDetails(username).body()?.apply {
-            val localUser = database.userItemDao().getUser(id)
-            isUserStared = localUser?.isUserStared == true
-            database.userItemDao().updateUser(this)
+        // todo find a better solution to prevent UnknownHostException
+        return try {
+            service.getUserDetails(username).body()?.apply {
+                val localUser = database.userItemDao().getUser(id)
+                isUserStared = localUser?.isUserStared == true
+                database.userItemDao().updateUser(this)
+            }
+        } catch (e: IOException) {
+            Timber.e(e) // Retrofit﹕ java.net.UnknownHostException
+            return database.userItemDao().getUser(username)
         }
     }
 

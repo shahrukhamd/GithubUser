@@ -12,4 +12,7 @@
     <string name="open_profile">Open</string>
     <string name="share_profile">Share</string>
     <string name="search_view_hint">Search GitHub user</string>
+    <string name="network_available">Network available</string>
+    <string name="network_unavailable">Network lost</string>
+    <string name="show_starred_users">Show starred users</string>
 </resources>
