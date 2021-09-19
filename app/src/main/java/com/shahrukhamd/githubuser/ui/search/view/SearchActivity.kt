@@ -10,13 +10,19 @@ package com.shahrukhamd.githubuser.ui.search.view
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.shahrukhamd.githubuser.R
+import com.shahrukhamd.utils.NetworkStateLiveData
+import com.shahrukhamd.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        NetworkStateLiveData(applicationContext).observe(this, {
+            if (!it) {
+                showToast(R.string.network_unavailable)
+            }
+        })
     }
 }

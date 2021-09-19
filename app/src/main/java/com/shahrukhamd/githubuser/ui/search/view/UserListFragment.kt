@@ -60,8 +60,8 @@ class UserListFragment : Fragment() {
 
         userListAdapter?.addLoadStateListener { viewModel.onUserListLoadStateChange(it) }
 
-        viewBinding.btnRetry.setOnClickListener { userListAdapter?.refresh() }
-        viewBinding.swipeRefresh.setOnRefreshListener { userListAdapter?.refresh() }
+        viewBinding.btnRetry.setOnClickListener { onUserRefreshList() }
+        viewBinding.swipeRefresh.setOnRefreshListener { onUserRefreshList() }
 
         viewBinding.svUserSearch.setOnQueryTextListener(
             DebouncingQueryTextListener(lifecycle) {
@@ -93,5 +93,10 @@ class UserListFragment : Fragment() {
                 UserListFragmentDirections.actionUserListFragmentToUserDetailFragment()
             )
         })
+    }
+
+    private fun onUserRefreshList() {
+        userListAdapter?.refresh()
+        viewModel.onUserRefreshList()
     }
 }

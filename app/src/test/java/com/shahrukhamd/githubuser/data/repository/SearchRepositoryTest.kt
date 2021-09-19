@@ -32,7 +32,7 @@ class SearchRepositoryTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxed = true)
-        searchRepository = SearchRepository(githubService, database)
+        searchRepository = SearchRepositoryImpl(githubService, database)
     }
 
     @After

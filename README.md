@@ -29,8 +29,7 @@ It fetches data from **Github** [search](https://docs.github.com/en/rest/referen
 - [Moshi](https://github.com/square/moshi) - To convert Java objects to JSON and back (used with Retrofit)
 
 ### Testing
-- [Espresso](https://developer.android.com/training/testing/espresso) - Easy, concise and powerful UI testing 
-- [StriKt](https://strikt.io/) - Strikingly easy assertion library built with Kotlin
+- [Espresso](https://developer.android.com/training/testing/espresso) - Easy, concise and powerful UI testing
 - [MockK](https://mockk.io/ANDROID.html) - Mocking library for Kotlin
 - [Truth](https://truth.dev/) - Fluent assertions for Java and Android
   

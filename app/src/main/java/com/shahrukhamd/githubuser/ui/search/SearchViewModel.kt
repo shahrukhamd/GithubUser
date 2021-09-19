@@ -26,6 +26,9 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(private var searchRepository: SearchRepository) : ViewModel() {
 
+    private var isShowingStarredUser = false
+    private var lastSearchedQuery = "john" // initial search query to fill the list
+
     private val _searchResponse = MutableLiveData<PagingData<GithubUser>>()
     val searchResponse: LiveData<PagingData<GithubUser>> = _searchResponse
 
@@ -34,6 +37,9 @@ class SearchViewModel @Inject constructor(private var searchRepository: SearchRe
 
     private val _showRetryButton = MutableLiveData<Event<Boolean>>()
     val showRetryButton: LiveData<Event<Boolean>> = _showRetryButton
+
+    private val _showStarredUserButton = MutableLiveData<Event<Boolean>>()
+    val showStarredUserButton: LiveData<Event<Boolean>> = _showStarredUserButton
 
     private val _showToast = MutableLiveData<Event<String>>()
     val showToast: LiveData<Event<String>> = _showToast
@@ -55,10 +61,11 @@ class SearchViewModel @Inject constructor(private var searchRepository: SearchRe
 
     init {
         // todo remove this logic and implement view for when there's no query
-        onSearchQueryChanged("john") // initial search query to fill the list
+        onSearchQueryChanged(lastSearchedQuery)
     }
 
     fun onSearchQueryChanged(query: String) {
+        lastSearchedQuery = query
         viewModelScope.launch {
             searchRepository.getPaginatedUser(query).cachedIn(this).collectLatest {
                 _searchResponse.postValue(it)
@@ -69,6 +76,7 @@ class SearchViewModel @Inject constructor(private var searchRepository: SearchRe
     fun onUserListLoadStateChange(loadState: CombinedLoadStates) {
         _showRefreshingView.value = Event(loadState.source.refresh is LoadState.Loading)
         _showRetryButton.value = Event(loadState.source.refresh is LoadState.Error)
+        _showStarredUserButton.value = Event(loadState.source.refresh is LoadState.Error)
 
         val errorState = loadState.source.append as? LoadState.Error
             ?: loadState.append as? LoadState.Error
@@ -79,11 +87,16 @@ class SearchViewModel @Inject constructor(private var searchRepository: SearchRe
         errorState?.let { _showToast.value = Event(it.error.localizedMessage) }
     }
 
-    fun getDetailScreenUserDetails() {
+    fun getDetailScreenUserDetails(testUser: GithubUser?) {
+        if (_onUserDetailUpdate.value == null && testUser != null) {
+            // only for testing purpose at the moment, this will help pass the user login name so this
+            // live data initialise with it and the UI testing can be done against the sample user data
+            _onUserDetailUpdate.value = Pair(0, testUser)
+        }
         _onUserDetailUpdate.value?.let {
             viewModelScope.launch {
                 searchRepository.getUserDetailsAndUpdateDb(it.second.login.orEmpty())?.let {
-                        userUpdate -> _onUserDetailUpdate.value = Pair(it.first, it.second.copy(userUpdate))
+                    userUpdate -> _onUserDetailUpdate.value = Pair(it.first, it.second.copy(userUpdate))
                 }
             }
         }
@@ -115,6 +128,22 @@ class SearchViewModel @Inject constructor(private var searchRepository: SearchRe
             user.isUserStared = !user.isUserStared
             searchRepository.updateUser(user)
             _onUserDetailUpdate.postValue(Pair(position, user))
+        }
+    }
+
+    fun onStarredUsersClick() {
+        isShowingStarredUser = true
+        viewModelScope.launch {
+            searchRepository.getPagingStarredUsers().cachedIn(this).collectLatest {
+                _searchResponse.postValue(it)
+            }
+        }
+    }
+
+    fun onUserRefreshList() {
+        if (isShowingStarredUser) {
+            isShowingStarredUser = false
+            onSearchQueryChanged(lastSearchedQuery)
         }
     }
 }
