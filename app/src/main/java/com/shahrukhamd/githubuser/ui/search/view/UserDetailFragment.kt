@@ -19,8 +19,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.shahrukhamd.githubuser.databinding.FragmentUserDetailsBinding
 import com.shahrukhamd.githubuser.ui.search.SearchViewModel
-import com.shahrukhamd.utils.EventObserver
-import com.shahrukhamd.utils.showToast
+import com.shahrukhamd.githubuser.utils.EventObserver
+import com.shahrukhamd.githubuser.utils.showToast
 
 class UserDetailFragment: Fragment() {
 

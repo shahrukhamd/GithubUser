@@ -1,4 +1,4 @@
-package com.shahrukhamd.utils
+package com.shahrukhamd.githubuser.utils
 
 import android.content.Context
 import android.net.ConnectivityManager

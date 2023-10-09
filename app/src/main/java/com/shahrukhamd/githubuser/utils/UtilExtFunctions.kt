@@ -5,7 +5,7 @@
  * terms of the MIT license - https://opensource.org/licenses/MIT
  */
 
-package com.shahrukhamd.utils
+package com.shahrukhamd.githubuser.utils
 
 import android.content.Context
 import android.view.View

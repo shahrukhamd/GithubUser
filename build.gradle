@@ -6,19 +6,15 @@ buildscript {
     }
 
     dependencies {
-        classpath Base.androidGradle
-        classpath Base.kotlinGradlePlugin
-        classpath Base.hiltGradlePlugin
-        classpath Base.navigationSafeArgPlugin
+        classpath "com.android.tools.build:gradle:7.4.2"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.22"
+        classpath 'androidx.navigation:navigation-safe-args-gradle-plugin:2.6.0'
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url 'https://maven.google.com' }
-    }
+plugins {
+    id 'com.google.dagger.hilt.android' version "2.44" apply false
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin' version '2.0.1' apply false
 }
 
 task clean(type: Delete) {

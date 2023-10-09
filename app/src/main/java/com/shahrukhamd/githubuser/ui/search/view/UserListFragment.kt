@@ -20,9 +20,9 @@ import com.shahrukhamd.githubuser.databinding.FragmentUserListBinding
 import com.shahrukhamd.githubuser.ui.common.ListItemLoadStateAdapter
 import com.shahrukhamd.githubuser.ui.search.SearchViewModel
 import com.shahrukhamd.githubuser.ui.search.UserListRecyclerViewAdapter
-import com.shahrukhamd.utils.DebouncingQueryTextListener
-import com.shahrukhamd.utils.EventObserver
-import com.shahrukhamd.utils.showToast
+import com.shahrukhamd.githubuser.utils.DebouncingQueryTextListener
+import com.shahrukhamd.githubuser.utils.EventObserver
+import com.shahrukhamd.githubuser.utils.showToast
 import kotlinx.coroutines.launch
 
 @ExperimentalPagingApi
