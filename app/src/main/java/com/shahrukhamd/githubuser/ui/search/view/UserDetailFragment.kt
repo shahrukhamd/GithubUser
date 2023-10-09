@@ -19,10 +19,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.shahrukhamd.githubuser.databinding.FragmentUserDetailsBinding
 import com.shahrukhamd.githubuser.ui.search.SearchViewModel
-import com.shahrukhamd.githubuser.utils.EventObserver
+import com.shahrukhamd.githubuser.utils.launchAndCollectIn
 import com.shahrukhamd.githubuser.utils.showToast
 
-class UserDetailFragment: Fragment() {
+class UserDetailFragment : Fragment() {
 
     private val viewModel: SearchViewModel by activityViewModels()
 
@@ -50,7 +50,7 @@ class UserDetailFragment: Fragment() {
     }
 
     private fun initViews() {
-        viewModel.onUserShare.observe(viewLifecycleOwner, EventObserver {
+        viewModel.onUserShare.launchAndCollectIn(viewLifecycleOwner) {
             val sendIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_TEXT, it)
@@ -59,24 +59,26 @@ class UserDetailFragment: Fragment() {
 
             val shareIntent = Intent.createChooser(sendIntent, null)
             startActivity(shareIntent)
-        })
+        }
 
-        viewModel.onUserProfileOpen.observe(viewLifecycleOwner, EventObserver {
+        viewModel.onUserProfileOpen.launchAndCollectIn(viewLifecycleOwner) {
             val openIntent: Intent = Intent().apply {
                 action = Intent.ACTION_VIEW
                 data = Uri.parse(it)
             }
             startActivity(openIntent)
-        })
+        }
     }
 
     private fun initObserver() {
-        viewModel.onCloseProfileDetails.observe(viewLifecycleOwner, EventObserver {
-            findNavController().navigateUp()
-        })
+        viewModel.onCloseProfileDetails.launchAndCollectIn(viewLifecycleOwner) {
+            if (it) {
+                findNavController().navigateUp()
+            }
+        }
 
-        viewModel.showToast.observe(viewLifecycleOwner, EventObserver {
+        viewModel.showToast.launchAndCollectIn(viewLifecycleOwner) {
             context?.showToast(it)
-        })
+        }
     }
 }

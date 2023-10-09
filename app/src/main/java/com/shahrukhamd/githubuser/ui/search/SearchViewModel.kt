@@ -17,44 +17,53 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.shahrukhamd.githubuser.data.model.GithubUser
 import com.shahrukhamd.githubuser.data.repository.SearchRepository
-import com.shahrukhamd.githubuser.utils.Event
+import com.shahrukhamd.githubuser.di.module.DispatcherModule
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchViewModel @Inject constructor(private var searchRepository: SearchRepository) : ViewModel() {
+class SearchViewModel @Inject constructor(
+    private val searchRepository: SearchRepository,
+    @DispatcherModule.IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @DispatcherModule.MainDispatcher private val mainDispatcher: CoroutineDispatcher
+) : ViewModel() {
 
     private var isShowingStarredUser = false
     private var lastSearchedQuery = "john" // initial search query to fill the list
 
-    private val _searchResponse = MutableLiveData<PagingData<GithubUser>>()
-    val searchResponse: LiveData<PagingData<GithubUser>> = _searchResponse
+    private val _searchResponse = MutableStateFlow<PagingData<GithubUser>>(PagingData.empty())
+    val searchResponse = _searchResponse.asStateFlow()
 
-    private val _showRefreshingView = MutableLiveData<Event<Boolean>>()
-    val showRefreshingView: LiveData<Event<Boolean>> = _showRefreshingView
+    private val _showRefreshingView = MutableStateFlow(false)
+    val showRefreshingView = _showRefreshingView.asStateFlow()
 
-    private val _showRetryButton = MutableLiveData<Event<Boolean>>()
-    val showRetryButton: LiveData<Event<Boolean>> = _showRetryButton
+    private val _showRetryButton = MutableStateFlow(false)
+    val showRetryButton = _showRetryButton.asStateFlow()
 
-    private val _showStarredUserButton = MutableLiveData<Event<Boolean>>()
-    val showStarredUserButton: LiveData<Event<Boolean>> = _showStarredUserButton
+    private val _showStarredUserButton = MutableStateFlow(false)
+    val showStarredUserButton = _showStarredUserButton.asStateFlow()
 
-    private val _showToast = MutableLiveData<Event<String>>()
-    val showToast: LiveData<Event<String>> = _showToast
+    private val _showToast = MutableSharedFlow<String>()
+    val showToast = _showToast.asSharedFlow()
 
-    private val _showUserDetails = MutableLiveData<Event<Boolean>>()
-    val showUserDetails: LiveData<Event<Boolean>> = _showUserDetails
+    private val _showUserDetails = MutableSharedFlow<Boolean>()
+    val showUserDetails = _showUserDetails.asSharedFlow()
 
-    private val _onUserShare = MutableLiveData<Event<String>>()
-    val onUserShare: LiveData<Event<String>> = _onUserShare
+    private val _onUserShare = MutableSharedFlow<String>()
+    val onUserShare = _onUserShare.asSharedFlow()
 
-    private val _onUserProfileOpen = MutableLiveData<Event<String>>()
-    val onUserProfileOpen: LiveData<Event<String>> = _onUserProfileOpen
+    private val _onUserProfileOpen = MutableSharedFlow<String>()
+    val onUserProfileOpen = _onUserProfileOpen.asSharedFlow()
 
-    private val _onCloseProfileDetails = MutableLiveData<Event<Boolean>>()
-    val onCloseProfileDetails: LiveData<Event<Boolean>> = _onCloseProfileDetails
+    private val _onCloseProfileDetails = MutableSharedFlow<Boolean>()
+    val onCloseProfileDetails = _onCloseProfileDetails.asSharedFlow()
 
     private val _onUserDetailUpdate = MutableLiveData<Pair<Int, GithubUser>>()
     val onUserDetailUpdate: LiveData<Pair<Int, GithubUser>> = _onUserDetailUpdate
@@ -66,17 +75,17 @@ class SearchViewModel @Inject constructor(private var searchRepository: SearchRe
 
     fun onSearchQueryChanged(query: String) {
         lastSearchedQuery = query
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             searchRepository.getPaginatedUser(query).cachedIn(this).collectLatest {
-                _searchResponse.postValue(it)
+                _searchResponse.value = it
             }
         }
     }
 
     fun onUserListLoadStateChange(loadState: CombinedLoadStates) {
-        _showRefreshingView.value = Event(loadState.source.refresh is LoadState.Loading)
-        _showRetryButton.value = Event(loadState.source.refresh is LoadState.Error)
-        _showStarredUserButton.value = Event(loadState.source.refresh is LoadState.Error)
+        _showRefreshingView.value = loadState.source.refresh is LoadState.Loading
+        _showRetryButton.value = loadState.source.refresh is LoadState.Error
+        _showStarredUserButton.value = loadState.source.refresh is LoadState.Error
 
         val errorState = loadState.source.append as? LoadState.Error
             ?: loadState.append as? LoadState.Error
@@ -84,7 +93,11 @@ class SearchViewModel @Inject constructor(private var searchRepository: SearchRe
             ?: loadState.prepend as? LoadState.Error
             ?: loadState.source.refresh as? LoadState.Error
 
-        errorState?.let { _showToast.value = Event(it.error.localizedMessage) }
+        errorState?.let { error ->
+            viewModelScope.launch(mainDispatcher) {
+                _showToast.emit(error.error.localizedMessage.orEmpty())
+            }
+        }
     }
 
     fun getDetailScreenUserDetails(testUser: GithubUser?) {
@@ -94,37 +107,46 @@ class SearchViewModel @Inject constructor(private var searchRepository: SearchRe
             _onUserDetailUpdate.value = Pair(0, testUser)
         }
         _onUserDetailUpdate.value?.let {
-            viewModelScope.launch {
-                searchRepository.getUserDetailsAndUpdateDb(it.second.login.orEmpty())?.let {
-                    userUpdate -> _onUserDetailUpdate.value = Pair(it.first, it.second.copy(userUpdate))
-                }
+            viewModelScope.launch(ioDispatcher) {
+                searchRepository.getUserDetailsAndUpdateDb(it.second.login.orEmpty())
+                    ?.let { userUpdate ->
+                        _onUserDetailUpdate.postValue(Pair(it.first, it.second.copy(userUpdate)))
+                    }
             }
         }
     }
 
     fun onUserListItemClicked(user: GithubUser, position: Int) {
-        _showUserDetails.value = Event(true)
+        viewModelScope.launch(mainDispatcher) {
+            _showUserDetails.emit(true)
+        }
         _onUserDetailUpdate.value = Pair(position, user)
     }
 
     fun onUserProfileShareClick() {
-        _onUserDetailUpdate.value?.second?.htmlUrl?.let {
-            _onUserShare.value = Event(it)
+        _onUserDetailUpdate.value?.second?.htmlUrl?.let {url ->
+            viewModelScope.launch(mainDispatcher) {
+                _onUserShare.emit(url)
+            }
         }
     }
 
     fun onUserProfileOpenClick() {
-        _onUserDetailUpdate.value?.second?.htmlUrl?.let {
-            _onUserProfileOpen.value = Event(it)
+        _onUserDetailUpdate.value?.second?.htmlUrl?.let {url ->
+            viewModelScope.launch(mainDispatcher) {
+                _onUserProfileOpen.emit(url)
+            }
         }
     }
 
     fun onProfileCloseClick() {
-        _onCloseProfileDetails.value = Event(true)
+        viewModelScope.launch(mainDispatcher) {
+            _onCloseProfileDetails.emit(true)
+        }
     }
 
     fun onUserStarClick(position: Int, user: GithubUser) {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             user.isUserStared = !user.isUserStared
             searchRepository.updateUser(user)
             _onUserDetailUpdate.postValue(Pair(position, user))
@@ -133,9 +155,9 @@ class SearchViewModel @Inject constructor(private var searchRepository: SearchRe
 
     fun onStarredUsersClick() {
         isShowingStarredUser = true
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             searchRepository.getPagingStarredUsers().cachedIn(this).collectLatest {
-                _searchResponse.postValue(it)
+                _searchResponse.value = it
             }
         }
     }
