@@ -86,6 +86,29 @@
                     tools:text="@tools:sample/lorem/random" />
 
                 <TextView
+                    android:id="@+id/tv_user_detail_followers"
+                    style="@style/TvUserDetailsMetadata"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.onUserDetailUpdate.second.followers.toString()}"
+                    app:drawableStartCompat="@drawable/ic_account_group_18px"
+                    app:layout_constraintStart_toStartOf="@+id/tv_user_detail_bio"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_user_detail_bio"
+                    tools:text="1234" />
+
+                <TextView
+                    android:id="@+id/tv_user_detail_repos"
+                    style="@style/TvUserDetailsMetadata"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.onUserDetailUpdate.second.publicRepos.toString()}"
+                    app:drawableStartCompat="@drawable/ic_source_repository_18px"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tv_user_detail_followers"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_user_detail_bio"
+                    tools:text="56" />
+
+                <TextView
                     android:id="@+id/tv_user_detail_email"
                     style="@style/TvUserDetailsMetadata"
                     android:layout_width="0dp"
@@ -94,7 +117,7 @@
                     app:drawableStartCompat="@drawable/ic_email_18px"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/tv_user_detail_bio"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_user_detail_bio"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_user_detail_followers"
                     tools:text="shahrukhamd@gmail.com" />
 
                 <TextView
