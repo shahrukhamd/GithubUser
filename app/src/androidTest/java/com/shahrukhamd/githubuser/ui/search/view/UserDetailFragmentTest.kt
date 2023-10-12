@@ -27,7 +27,7 @@ import com.shahrukhamd.githubuser.launchFragmentInHiltContainer
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Before
@@ -131,7 +131,7 @@ class UserDetailFragmentTest {
 
     @Test
     fun whenUserIsNotStarredThenStarViewClickShouldMakeItStarred() {
-        runBlockingTest {
+        runTest {
             // update user as not starred in repo
             var user = repo.getUserDetailsAndUpdateDb("")!!
             user.isUserStared = false
@@ -150,7 +150,7 @@ class UserDetailFragmentTest {
 
     @Test
     fun whenUserIsStarredThenStarViewClickShouldMakeItNotStarred() {
-        runBlockingTest {
+        runTest {
             // update user as starred in repo
             var user = repo.getUserDetailsAndUpdateDb("")!!
             user.isUserStared = true

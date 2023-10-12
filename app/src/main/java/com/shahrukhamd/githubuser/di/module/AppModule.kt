@@ -120,18 +120,3 @@ class AppModule {
     @QAppDatabase
     fun provideDatabase(app: Application) = AppDatabase.getInstance(app)
 }
-
-/**
- * A separate module just for the [SearchRepository] so this can be used for injecting fake one in test(s)
- */
-@Module
-@InstallIn(SingletonComponent::class)
-object SearchRepositoryModule {
-    @Provides
-    @Singleton
-    fun provideSearchRepository(
-        @AppModule.QGithubService service: GithubService,
-        @AppModule.QAppDatabase database: AppDatabase): SearchRepository {
-        return SearchRepositoryImpl(service, database)
-    }
-}

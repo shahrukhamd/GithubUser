@@ -1,17 +1,24 @@
 /*
- * Copyright (c) 2021 Shahrukh Ahmed Siddiqui
+ * Copyright (c) 2023 Shahrukh Ahmed Siddiqui
  *
  * You may use, distribute and modify this code under the
  * terms of the MIT license - https://opensource.org/licenses/MIT
  */
 
-package com.shahrukhamd.utils
+package com.shahrukhamd.githubuser.utils
 
 import android.content.Context
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 /**
  * Register [View.OnClickListener] on ViewHolder root view
@@ -39,3 +46,18 @@ fun Context.showToast(text: CharSequence) = Toast.makeText(this, text, Toast.LEN
  * @param resId: String resource ID of the message to show in the toast
  */
 fun Context.showToast(@StringRes resId: Int) = Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()
+
+/**
+ * Wrapped function, launching and collecting flow on a specific state of the lifecycle
+ */
+inline fun <T> Flow<T>.launchAndCollectIn(
+    owner: LifecycleOwner,
+    minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
+    crossinline action: suspend CoroutineScope.(T) -> Unit
+) = owner.lifecycleScope.launch {
+    owner.repeatOnLifecycle(minActiveState) {
+        collect {
+            action(it)
+        }
+    }
+}

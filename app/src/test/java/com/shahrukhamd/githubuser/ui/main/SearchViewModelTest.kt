@@ -11,13 +11,17 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import com.google.common.truth.Truth.assertThat
+import com.shahrukhamd.githubuser.MainDispatcherRule
+import com.shahrukhamd.githubuser.data.model.GithubUser
 import com.shahrukhamd.githubuser.data.repository.SearchRepository
 import com.shahrukhamd.githubuser.ui.search.SearchViewModel
 import io.mockk.MockKAnnotations
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import io.mockk.verify
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -25,9 +29,11 @@ import org.junit.Test
 
 class SearchViewModelTest {
 
-    @Rule
-    @JvmField
-    val instantExecutorRule = InstantTaskExecutorRule()
+    @get:Rule
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
     @MockK
     private lateinit var combinedLoadStates: CombinedLoadStates
@@ -40,7 +46,11 @@ class SearchViewModelTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxed = true)
-        viewModel = SearchViewModel(searchRepository)
+        viewModel = SearchViewModel(
+            searchRepository,
+            mainDispatcherRule.testDispatcher,
+            mainDispatcherRule.testDispatcher
+        )
     }
 
     @After
@@ -54,8 +64,8 @@ class SearchViewModelTest {
 
         viewModel.onUserListLoadStateChange(combinedLoadStates)
 
-        assertThat(viewModel.showRefreshingView.value?.getDataIfNotConsumed()).isTrue()
-        assertThat(viewModel.showRetryButton.value?.getDataIfNotConsumed()).isFalse()
+        assertThat(viewModel.showRefreshingView.value).isTrue()
+        assertThat(viewModel.showRetryButton.value).isFalse()
     }
 
     @Test
@@ -64,32 +74,56 @@ class SearchViewModelTest {
 
         viewModel.onUserListLoadStateChange(combinedLoadStates)
 
-        assertThat(viewModel.showRefreshingView.value?.getDataIfNotConsumed()).isFalse()
-        assertThat(viewModel.showRetryButton.value?.getDataIfNotConsumed()).isTrue()
+        assertThat(viewModel.showRefreshingView.value).isFalse()
+        assertThat(viewModel.showRetryButton.value).isTrue()
     }
 
     @Test
-    fun `when user list load state is error without message, then show toast without message`() {
-        every { combinedLoadStates.source.refresh } returns LoadState.Error(Exception())
+    fun `when called search query changes, repository api should be called with same query`() =
+        runTest {
+            viewModel.onSearchQueryChanged("some query")
 
-        viewModel.onUserListLoadStateChange(combinedLoadStates)
+            verify { searchRepository.getPaginatedUser("some query") }
+        }
 
-        assertThat(viewModel.showToast.value?.getDataIfNotConsumed()).isNull()
+    @Test
+    fun `when fetch details for user, repository api should be called with same login`() = runTest {
+        val user = GithubUser(id = 1, login = "username")
+
+        viewModel.getDetailScreenUserDetails(user)
+
+        coVerify {
+            searchRepository.getUserDetailsAndUpdateDb("username")
+        }
     }
 
     @Test
-    fun `when user list load state is error with message, then show toast with same message`() {
-        every { combinedLoadStates.source.refresh } returns LoadState.Error(Exception("some message"))
+    fun `when user star clicked, update user profile in repository`() = runTest {
+        val user = GithubUser(id = 1, htmlUrl = "htmlUrl")
 
-        viewModel.onUserListLoadStateChange(combinedLoadStates)
+        viewModel.onUserStarClick(1, user)
 
-        assertThat(viewModel.showToast.value?.getDataIfNotConsumed()).matches("some message")
+        coVerify {
+            searchRepository.updateUser(user)
+        }
     }
 
     @Test
-    fun `when called search query changes, repository api should be called with same query`() {
-        viewModel.onSearchQueryChanged("some query")
+    fun `when starred users clicked, paginated starred users should be fetched from repository`() =
+        runTest {
+            viewModel.onStarredUsersClick()
 
-        verify { searchRepository.getPaginatedUser("some query") }
+            coVerify {
+                searchRepository.getPagingStarredUsers()
+            }
+        }
+
+    @Test
+    fun `when user refresh list, repository should be called to fetch paginated users`() = runTest {
+        viewModel.onUserRefreshList()
+
+        coVerify {
+            searchRepository.getPaginatedUser(any())
+        }
     }
 }

@@ -1,11 +1,8 @@
-package com.shahrukhamd.utils
+package com.shahrukhamd.githubuser.utils
 
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
-import android.net.NetworkCapabilities
-import android.net.NetworkRequest
-import android.os.Build
 import androidx.lifecycle.LiveData
 
 /**
@@ -14,11 +11,6 @@ import androidx.lifecycle.LiveData
 class NetworkStateLiveData(private val context: Context) : LiveData<Boolean>() {
 
     private var connectivityManager: ConnectivityManager? = null
-
-    private val networkRequest = NetworkRequest.Builder()
-        .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
-        .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-        .build()
 
     private val networkCallback = object : ConnectivityManager.NetworkCallback() {
         override fun onAvailable(network: Network) {
@@ -44,11 +36,7 @@ class NetworkStateLiveData(private val context: Context) : LiveData<Boolean>() {
                 context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            connectivityManager?.registerDefaultNetworkCallback(networkCallback)
-        } else {
-            connectivityManager?.registerNetworkCallback(networkRequest, networkCallback)
-        }
+        connectivityManager?.registerDefaultNetworkCallback(networkCallback)
     }
 
     override fun onInactive() {

@@ -52,8 +52,7 @@
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:refreshing="@{viewModel.showRefreshingView.dataIfNotConsumed}">
+            android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -65,7 +64,6 @@
                     android:layout_height="wrap_content"
                     android:text="@string/retry"
                     android:visibility="gone"
-                    app:isVisible="@{viewModel.showRetryButton.dataIfNotConsumed}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -79,7 +77,6 @@
                     android:onClick="@{() -> viewModel.onStarredUsersClick()}"
                     android:text="@string/show_starred_users"
                     android:visibility="gone"
-                    app:isVisible="@{viewModel.showStarredUserButton.dataIfNotConsumed}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/btn_retry"

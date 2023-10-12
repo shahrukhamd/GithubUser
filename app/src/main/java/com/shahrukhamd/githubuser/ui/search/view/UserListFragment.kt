@@ -18,11 +18,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
 import com.shahrukhamd.githubuser.databinding.FragmentUserListBinding
 import com.shahrukhamd.githubuser.ui.common.ListItemLoadStateAdapter
+import com.shahrukhamd.githubuser.ui.common.isVisible
 import com.shahrukhamd.githubuser.ui.search.SearchViewModel
 import com.shahrukhamd.githubuser.ui.search.UserListRecyclerViewAdapter
-import com.shahrukhamd.utils.DebouncingQueryTextListener
-import com.shahrukhamd.utils.EventObserver
-import com.shahrukhamd.utils.showToast
+import com.shahrukhamd.githubuser.utils.DebouncingQueryTextListener
+import com.shahrukhamd.githubuser.utils.launchAndCollectIn
+import com.shahrukhamd.githubuser.utils.showToast
 import kotlinx.coroutines.launch
 
 @ExperimentalPagingApi
@@ -73,25 +74,39 @@ class UserListFragment : Fragment() {
     }
 
     private fun initObserver() {
-        viewModel.searchResponse.observe(viewLifecycleOwner, {
+        viewModel.searchResponse.launchAndCollectIn(viewLifecycleOwner) {
             viewBinding.swipeRefresh.isRefreshing = false
             lifecycleScope.launch { userListAdapter?.submitData(it) }
-        })
+        }
+
+        viewModel.showRefreshingView.launchAndCollectIn(viewLifecycleOwner) {
+            viewBinding.swipeRefresh.isRefreshing = it
+        }
+
+        viewModel.showRetryButton.launchAndCollectIn(viewLifecycleOwner) {
+            viewBinding.btnRetry.isVisible(it)
+        }
+
+        viewModel.showStarredUserButton.launchAndCollectIn(viewLifecycleOwner) {
+            viewBinding.btnShowStarredUsers.isVisible(it)
+        }
+
+        viewModel.showToast.launchAndCollectIn(viewLifecycleOwner) {
+            context?.showToast(it)
+        }
+
+        viewModel.showUserDetails.launchAndCollectIn(viewLifecycleOwner) {
+            if (it) {
+                findNavController().navigate(
+                    UserListFragmentDirections.actionUserListFragmentToUserDetailFragment()
+                )
+            }
+        }
 
         viewModel.onUserDetailUpdate.observe(viewLifecycleOwner, {
             lifecycleScope.launch {
                 userListAdapter?.notifyItemChanged(it.first, it.second)
             }
-        })
-
-        viewModel.showToast.observe(viewLifecycleOwner, EventObserver {
-            context?.showToast(it)
-        })
-
-        viewModel.showUserDetails.observe(viewLifecycleOwner, EventObserver {
-            findNavController().navigate(
-                UserListFragmentDirections.actionUserListFragmentToUserDetailFragment()
-            )
         })
     }
 

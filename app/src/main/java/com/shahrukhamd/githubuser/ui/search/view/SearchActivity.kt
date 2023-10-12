@@ -10,8 +10,8 @@ package com.shahrukhamd.githubuser.ui.search.view
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.shahrukhamd.githubuser.R
-import com.shahrukhamd.utils.NetworkStateLiveData
-import com.shahrukhamd.utils.showToast
+import com.shahrukhamd.githubuser.utils.NetworkStateLiveData
+import com.shahrukhamd.githubuser.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

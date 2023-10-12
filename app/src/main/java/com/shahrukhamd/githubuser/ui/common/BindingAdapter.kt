@@ -54,6 +54,6 @@ fun RecyclerView.setDividerItemDecoration(dividerItemDecorationOrientation: Int)
 fun ImageView.isUserStarted(isUserStared: Boolean?) {
     when(isUserStared) {
         true -> setImageResource(R.drawable.ic_star_filled_yellow_36px)
-        false -> setImageResource(R.drawable.ic_star_unfilled_36px)
+        false, null -> setImageResource(R.drawable.ic_star_unfilled_36px)
     }
 }
