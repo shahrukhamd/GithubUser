@@ -18,7 +18,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.After
@@ -61,7 +61,7 @@ class GithubPagingSourceTest {
 
     @Test
     fun `when github service throw io exception, then same exception should return as load result`() {
-        runBlockingTest {
+        runTest {
 
             val ioException = IOException("Some message for exception")
 
@@ -83,7 +83,7 @@ class GithubPagingSourceTest {
 
     @Test
     fun `when github service throw http exception, then same exception should return as load result`() {
-        runBlockingTest {
+        runTest {
 
             val httpException = HttpException(
                 Response.error<GithubUser>(
@@ -110,7 +110,7 @@ class GithubPagingSourceTest {
 
     @Test
     fun `when github service response code is 403, then return error response with same message`() {
-        runBlockingTest {
+        runTest {
             val res = Response.error<ApiUserSearchResponse>(
                 403, "some invalid json"
                     .toResponseBody("application/json".toMediaTypeOrNull())
@@ -136,7 +136,7 @@ class GithubPagingSourceTest {
 
     @Test
     fun `when github service response code is 200, then return mocked data items`() {
-        runBlockingTest {
+        runTest {
             val res = Response.success<ApiUserSearchResponse>(apiUserSearchResponse)
 
             every {

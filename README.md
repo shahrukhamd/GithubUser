@@ -4,8 +4,6 @@
 
 # GithubUser App (work in progress)
 
-<a href="https://android-arsenal.com/api?level=23#l23"><img alt="API" src="https://img.shields.io/badge/API-23%2B-brightgreen.svg?style=flat"/></a>
-
 A sample project demonstrating the use of the latest design patterns, libraries, architecture and more.
 
 It fetches data from **Github** [search](https://docs.github.com/en/rest/reference/search) and [user details](https://docs.github.com/en/rest/reference/users) APIs and show it to the user in the list and detailed screens. A searched user can be starred from the list or the details screen and the data will be saved in the local database. A user profile can be shared or open in a browser from the details screen.
@@ -32,6 +30,7 @@ It fetches data from **Github** [search](https://docs.github.com/en/rest/referen
 - [Espresso](https://developer.android.com/training/testing/espresso) - Easy, concise and powerful UI testing
 - [MockK](https://mockk.io/ANDROID.html) - Mocking library for Kotlin
 - [Truth](https://truth.dev/) - Fluent assertions for Java and Android
+- [Turbine](https://github.com/cashapp/turbine) - Kotlin flow testing made easy
   
 ### Tools
 - [Glide](https://bumptech.github.io/glide/) -  Fast and efficient image loading
@@ -48,7 +47,7 @@ Interested in seeing a particular feature? Please [open a new issue](https://git
 
     MIT License (https://opensource.org/licenses/MIT)
 
-    Copyright (c) 2021 Shahrukh Ahmed Siddiqui
+    Copyright (c) 2023 Shahrukh Ahmed Siddiqui
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -71,7 +70,6 @@ Interested in seeing a particular feature? Please [open a new issue](https://git
 
 ## Support
 
-This project is authored and maintained by [shahrukhamd](https://shahrukhamd.com/). 
-You can show your support by buying me a coffee :)
+This project is authored and maintained by [shahrukhamd](https://shahrukhamd.com/).
 
 <a href="https://www.buymeacoffee.com/shahrukhamd"><img alt="buy me coffee" src="/art/buymecoffee.png"/></a>
